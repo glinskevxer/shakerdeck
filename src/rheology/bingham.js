@@ -69,7 +69,12 @@ export function stressAt(readings, shearRatePerSecond) {
 export function gels({ tenSecond, tenMinute, thirtyMinute } = {}) {
   const ten = toNonNegative(tenSecond ?? 0, 'tenSecond');
   const minute = toNonNegative(tenMinute ?? ten, 'tenMinute');
-  const half = thirtyMinute === undefined ? null : toNonNegative(thirtyMinute, 'thirtyMinute');
+  // A sheet that was read but left blank arrives as null rather than missing,
+  // and a null has to mean the same thing as a field that was never there.
+  const half =
+    thirtyMinute === undefined || thirtyMinute === null
+      ? null
+      : toNonNegative(thirtyMinute, 'thirtyMinute');
   if (minute < ten) {
     throw new Error(`the ten minute gel ${minute} is below the ten second gel ${ten}`);
   }

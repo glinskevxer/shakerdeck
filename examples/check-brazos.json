@@ -1,0 +1,22 @@
+{
+  "well": "brazos 14-3",
+  "date": "2024-08-19",
+  "time": "06:00",
+  "depthFeet": 10450,
+  "samplePoint": "flowline",
+  "base": "water",
+  "weightPpg": 12.4,
+  "funnelSeconds": 48,
+  "temperatureF": 118,
+  "ph": 9.6,
+  "chlorideMgL": 32000,
+  "totalHardnessMgL": 400,
+  "sandPercent": 0.25,
+  "mbtLbBbl": 17.5,
+  "dials": { "600": 64, "300": 42, "200": 33, "100": 23, "6": 6, "3": 5 },
+  "gels": { "tenSecond": 6, "tenMinute": 9 },
+  "filtrate": { "apiMl": 4.8, "cakeThirtySecondInch": 2, "hthpMl": 12.4, "hthpTemperatureF": 250 },
+  "alkalinity": { "pf": 0.4, "mf": 1.1, "pm": 1.8 },
+  "retort": { "solidsPercent": 18, "oilPercent": 0, "waterPercent": 82 },
+  "note": "raised weight over the tour"
+}
