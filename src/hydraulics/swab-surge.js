@@ -11,6 +11,7 @@
  * four five is the usual figure for laminar flow in a concentric annulus.
  */
 import { toPositive, toNonNegative, toNumber, round } from '../util/number.js';
+import { readAnnulus } from '../well/annulus-check.js';
 import { annularLoss } from './pressure-loss.js';
 import { GRADIENT_PER_PPG } from '../units/density.js';
 
@@ -28,11 +29,7 @@ export function effectiveVelocity({
   clingingConstant = CLINGING_CONSTANT,
 }) {
   const speed = toNonNegative(pipeSpeedFeetPerMinute, 'pipeSpeedFeetPerMinute');
-  const hole = toPositive(holeIdInches, 'holeIdInches');
-  const pipe = toPositive(pipeOdInches, 'pipeOdInches');
-  if (pipe >= hole) {
-    throw new Error(`a ${pipe} inch pipe does not fit in a ${hole} inch hole`);
-  }
+  const { hole, pipe } = readAnnulus(holeIdInches, pipeOdInches, { allowEmpty: false });
   const cling = toNonNegative(clingingConstant, 'clingingConstant');
   const ratio = (pipe * pipe) / (hole * hole - pipe * pipe);
   const displaced = closedEnd ? ratio : 0;

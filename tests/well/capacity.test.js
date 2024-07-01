@@ -47,7 +47,9 @@ describe('annularCapacity', () => {
   });
 
   it('refuses a string that does not fit', () => {
-    expect(() => annularCapacity(8.5, 8.5)).toThrow(/does not fit/);
+    expect(() => annularCapacity(8.5, 8.5)).toThrow(
+      /a 8.5 inch pipe does not fit in a 8.5 inch hole/
+    );
     expect(() => annularCapacity(8.5, 9.625)).toThrow(/does not fit/);
   });
 });

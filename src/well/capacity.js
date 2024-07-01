@@ -7,6 +7,7 @@
  * are barrels or barrels per foot.
  */
 import { toPositive, toNonNegative, toNumber, round } from '../util/number.js';
+import { readAnnulus } from './annulus-check.js';
 
 /** Cubic inches per barrel divided by twelve, the constant every hand uses. */
 export const CAPACITY_CONSTANT = 1029.4;
@@ -23,11 +24,7 @@ export function boreCapacity(idInches) {
  * Capacity of the annulus between a hole and a string, barrels per foot.
  */
 export function annularCapacity(holeIdInches, pipeOdInches) {
-  const hole = toPositive(holeIdInches, 'holeIdInches');
-  const pipe = toNonNegative(pipeOdInches, 'pipeOdInches');
-  if (pipe >= hole) {
-    throw new Error(`pipe outside diameter ${pipe} does not fit inside a ${hole} inch hole`);
-  }
+  const { hole, pipe } = readAnnulus(holeIdInches, pipeOdInches);
   return (hole * hole - pipe * pipe) / CAPACITY_CONSTANT;
 }
 

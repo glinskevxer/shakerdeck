@@ -17,6 +17,7 @@
  * the flow behaviour index.
  */
 import { toPositive, toNonNegative, round } from '../util/number.js';
+import { readAnnulus } from '../well/annulus-check.js';
 
 /** Pipe form constant. */
 export const PIPE_REYNOLDS_CONSTANT = 89100;
@@ -66,11 +67,7 @@ export function reynoldsAnnulus({
   const { n, k } = checkModel(model);
   const density = toPositive(densityPpg, 'densityPpg');
   const velocity = toNonNegative(velocityFeetPerSecond, 'velocityFeetPerSecond');
-  const hole = toPositive(holeIdInches, 'holeIdInches');
-  const pipe = toNonNegative(pipeOdInches, 'pipeOdInches');
-  if (pipe >= hole) {
-    throw new Error(`a ${pipe} inch pipe does not fit in a ${hole} inch hole`);
-  }
+  const { hole, pipe } = readAnnulus(holeIdInches, pipeOdInches);
   if (velocity === 0) {
     return 0;
   }

@@ -8,6 +8,7 @@
  * the three regimes rather than in one pass.
  */
 import { toPositive, toNonNegative, round } from '../util/number.js';
+import { readAnnulus } from '../well/annulus-check.js';
 
 /** Specific gravity taken for a drilled cutting. */
 export const CUTTINGS_SG = 2.6;
@@ -47,11 +48,7 @@ export function annularApparentViscosity({
   const n = toPositive(model?.n, 'n');
   const k = toPositive(model?.k, 'k');
   const velocity = toPositive(velocityFeetPerMinute, 'velocityFeetPerMinute');
-  const gap =
-    toPositive(holeIdInches, 'holeIdInches') - toNonNegative(pipeOdInches, 'pipeOdInches');
-  if (gap <= 0) {
-    throw new Error('the pipe does not fit in the hole');
-  }
+  const { gap } = readAnnulus(holeIdInches, pipeOdInches);
   // K here is in pounds force per hundred square feet times seconds to the n,
   // and the form wants equivalent centipoise, so the 478.8 goes in with it.
   const consistency = k * 478.8;

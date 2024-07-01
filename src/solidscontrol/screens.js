@@ -73,9 +73,8 @@ export function designationFor(cutMicrons) {
 export function finestScreenFor({ flowGpm, conductancePerGpm }) {
   const flow = toPositive(flowGpm, 'flowGpm');
   const needed = flow * toPositive(conductancePerGpm, 'conductancePerGpm');
-  const candidates = SCREEN_TABLE.filter((entry) => entry.midpoint === undefined || true);
   let chosen = null;
-  for (const entry of candidates) {
+  for (const entry of SCREEN_TABLE) {
     const capacity = (entry.low + entry.high) / 2;
     if (capacity >= needed) {
       chosen = entry;

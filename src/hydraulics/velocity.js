@@ -8,6 +8,7 @@
  * second.
  */
 import { toPositive, toNonNegative, round, divide } from '../util/number.js';
+import { readAnnulus } from '../well/annulus-check.js';
 
 /** Gallons a minute over square inches, to feet a minute. */
 export const VELOCITY_CONSTANT = 24.5;
@@ -24,11 +25,7 @@ export function pipeVelocity(flowGpm, idInches) {
  * Velocity in an annulus, feet a minute.
  */
 export function annularVelocity(flowGpm, holeIdInches, pipeOdInches) {
-  const hole = toPositive(holeIdInches, 'holeIdInches');
-  const pipe = toNonNegative(pipeOdInches, 'pipeOdInches');
-  if (pipe >= hole) {
-    throw new Error(`a ${pipe} inch pipe does not fit in a ${hole} inch hole`);
-  }
+  const { hole, pipe } = readAnnulus(holeIdInches, pipeOdInches);
   return (VELOCITY_CONSTANT * toNonNegative(flowGpm, 'flowGpm')) / (hole * hole - pipe * pipe);
 }
 
@@ -53,12 +50,7 @@ export function feetPerSecond(feetPerMinute) {
  * diameters for the slot approximation every field formula uses.
  */
 export function hydraulicDiameter(holeIdInches, pipeOdInches) {
-  const hole = toPositive(holeIdInches, 'holeIdInches');
-  const pipe = toNonNegative(pipeOdInches, 'pipeOdInches');
-  if (pipe >= hole) {
-    throw new Error(`a ${pipe} inch pipe does not fit in a ${hole} inch hole`);
-  }
-  return hole - pipe;
+  return readAnnulus(holeIdInches, pipeOdInches).gap;
 }
 
 /**
@@ -66,11 +58,7 @@ export function hydraulicDiameter(holeIdInches, pipeOdInches) {
  * question is actually asked on the rig floor.
  */
 export function flowForVelocity(velocityFeetPerMinute, holeIdInches, pipeOdInches) {
-  const hole = toPositive(holeIdInches, 'holeIdInches');
-  const pipe = toNonNegative(pipeOdInches, 'pipeOdInches');
-  if (pipe >= hole) {
-    throw new Error(`a ${pipe} inch pipe does not fit in a ${hole} inch hole`);
-  }
+  const { hole, pipe } = readAnnulus(holeIdInches, pipeOdInches);
   return (
     (toNonNegative(velocityFeetPerMinute, 'velocityFeetPerMinute') * (hole * hole - pipe * pipe)) /
     VELOCITY_CONSTANT
