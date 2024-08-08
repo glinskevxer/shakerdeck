@@ -1,0 +1,30 @@
+{
+  "well": "brazos 14-3",
+  "sections": [
+    {
+      "name": "surface",
+      "fromFeet": 0,
+      "toFeet": 6000,
+      "holeSizeInches": 12.25,
+      "limits": {
+        "weightPpg": { "min": 8.9, "max": 9.6 },
+        "funnelSeconds": { "min": 32, "max": 45 },
+        "filtrateApiMl": { "max": 15 }
+      }
+    },
+    {
+      "name": "intermediate",
+      "fromFeet": 6000,
+      "toFeet": 11000,
+      "holeSizeInches": 8.5,
+      "limits": {
+        "weightPpg": { "min": 12, "max": 12.8 },
+        "plasticViscosity": { "max": 26 },
+        "yieldPoint": { "min": 14, "max": 24 },
+        "filtrateApiMl": { "max": 6 },
+        "ph": { "min": 9, "max": 10.5 },
+        "sandPercent": { "max": 0.5 }
+      }
+    }
+  ]
+}
