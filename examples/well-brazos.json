@@ -1,0 +1,31 @@
+{
+  "well": "brazos 14-3",
+  "totalDepthFeet": 10450,
+  "tvdFeet": 10200,
+  "weightPpg": 12.4,
+  "surfaceCase": 3,
+  "bitDiameterInches": 8.5,
+  "nozzleThirtySeconds": [13, 13, 13],
+  "flowGpm": 600,
+  "porePressurePpg": 11.9,
+  "fractureGradientPpg": 13.6,
+  "penetrationFeetPerHour": 60,
+  "hole": {
+    "sections": [
+      { "name": "surface casing", "idInches": 8.681, "bottomFeet": 6000, "cased": true },
+      { "name": "open hole", "idInches": 8.5, "bottomFeet": 10450 }
+    ]
+  },
+  "string": [
+    { "name": "drill collars", "odInches": 6.5, "idInches": 2.8125, "lengthFeet": 600 },
+    { "name": "drill pipe", "odInches": 5, "idInches": 4.276, "lengthFeet": 9850 }
+  ],
+  "pump": {
+    "label": "number one",
+    "type": "triplex",
+    "linerInches": 6.5,
+    "strokeInches": 12,
+    "efficiency": 0.95
+  },
+  "strokesPerMinute": 120
+}

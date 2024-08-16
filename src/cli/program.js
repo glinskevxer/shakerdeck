@@ -10,6 +10,7 @@ import { Command } from 'commander';
 import { VERSION } from '../version.js';
 import { readJson, render, writeText, UsageError } from './io.js';
 import { checkCommand } from './commands/check.js';
+import { hydraulicsCommand } from './commands/hydraulics.js';
 
 function output(result, options) {
   const text = render(result, options);
@@ -40,6 +41,23 @@ export function buildProgram({ print = console.log } = {}) {
     .option('-o, --out <file>', 'write to a file instead of the screen')
     .action((options) => {
       const result = checkCommand(readJson(options.check));
+      print(output(result, options));
+    });
+
+  program
+    .command('hydraulics')
+    .description('work the circulating system out for a well at a rate')
+    .requiredOption('-w, --well <file>', 'the well as json')
+    .requiredOption('-c, --check <file>', 'the mud check as json')
+    .option('-r, --rate <gpm>', 'override the rate on the well file')
+    .option('-f, --format <format>', 'text or json', 'text')
+    .option('-o, --out <file>', 'write to a file instead of the screen')
+    .action((options) => {
+      const well = readJson(options.well);
+      if (options.rate !== undefined) {
+        well.flowGpm = Number(options.rate);
+      }
+      const result = hydraulicsCommand(well, readJson(options.check));
       print(output(result, options));
     });
 
