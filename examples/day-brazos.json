@@ -1,0 +1,17 @@
+{
+  "well": "brazos 14-3",
+  "date": "2024-08-19",
+  "reportNumber": 14,
+  "footageFeet": 820,
+  "mudBuiltBbl": 180,
+  "serviceCharge": 1450,
+  "rentalCharge": 320,
+  "haulageCharge": 0,
+  "activity": [
+    "drilled 8 1/2 inch hole from 9630 to 10450 ft",
+    "raised weight from 12.1 to 12.4 ppg over the tour",
+    "ran the centrifuge for eight hours on the active"
+  ],
+  "used": { "BAR": 260, "CAU": 8, "PAC": 12 },
+  "pits": { "activeBbl": 812 }
+}

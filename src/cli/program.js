@@ -11,6 +11,8 @@ import { VERSION } from '../version.js';
 import { readJson, render, writeText, UsageError } from './io.js';
 import { checkCommand } from './commands/check.js';
 import { hydraulicsCommand } from './commands/hydraulics.js';
+import { dailyCommand } from './commands/daily.js';
+import { mixCommand } from './commands/mix.js';
 
 function output(result, options) {
   const text = render(result, options);
@@ -58,6 +60,60 @@ export function buildProgram({ print = console.log } = {}) {
         well.flowGpm = Number(options.rate);
       }
       const result = hydraulicsCommand(well, readJson(options.check));
+      print(output(result, options));
+    });
+
+  program
+    .command('daily')
+    .description('build the daily mud report for one day on one well')
+    .requiredOption('-d, --day <file>', "the day's records as json")
+    .requiredOption('-c, --check <file>', 'the mud check as json')
+    .option('-p, --programme <file>', 'the mud programme as json')
+    .option('-P, --products <file>', 'the price list as json')
+    .option('-f, --format <format>', 'text or json', 'text')
+    .option('-o, --out <file>', 'write to a file instead of the screen')
+    .option('--summary', 'print the one line summary instead of the page')
+    .action((options) => {
+      const result = dailyCommand({
+        day: readJson(options.day),
+        check: readJson(options.check),
+        programme: options.programme ? readJson(options.programme) : null,
+        products: options.products ? readJson(options.products) : null,
+      });
+      if (options.summary) {
+        print(result.summary);
+        return;
+      }
+      print(output(result, options));
+    });
+
+  program
+    .command('mix')
+    .description('work out a mixing order to move the mud where it needs to go')
+    .requiredOption('-j, --job <job>', 'weight up, cut back, blend or dilute')
+    .option('--from <ppg>', 'the weight the mud is at now')
+    .option('--to <ppg>', 'the weight it needs to be')
+    .requiredOption('-v, --volume <bbl>', 'the volume of the system')
+    .option('-a, --agent <agent>', 'the weighting agent', 'barite')
+    .option('--hold-volume', 'dump mud first so the system ends the size it started')
+    .option('--dilutant <ppg>', 'the weight of what is being cut back with')
+    .option('--heavy <ppg>', 'the weight of the heavy mud, for a blend')
+    .option('--from-solids <fraction>', 'the solids fraction now, for a dilution')
+    .option('--to-solids <fraction>', 'the solids fraction wanted, for a dilution')
+    .option('-f, --format <format>', 'text or json', 'text')
+    .action((options) => {
+      const result = mixCommand({
+        job: options.job,
+        fromPpg: options.from === undefined ? undefined : Number(options.from),
+        toPpg: options.to === undefined ? undefined : Number(options.to),
+        volumeBbl: Number(options.volume),
+        agent: options.agent,
+        holdVolume: Boolean(options.holdVolume),
+        dilutantPpg: options.dilutant === undefined ? null : Number(options.dilutant),
+        heavyPpg: options.heavy === undefined ? null : Number(options.heavy),
+        fromFraction: options.fromSolids === undefined ? null : Number(options.fromSolids),
+        toFraction: options.toSolids === undefined ? null : Number(options.toSolids),
+      });
       print(output(result, options));
     });
 

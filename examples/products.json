@@ -1,0 +1,42 @@
+[
+  {
+    "code": "BAR",
+    "name": "barite",
+    "unit": "sack",
+    "unitPounds": 100,
+    "pricePerUnit": 16,
+    "category": "weighting"
+  },
+  {
+    "code": "CAU",
+    "name": "caustic soda",
+    "unit": "sack",
+    "unitPounds": 50,
+    "pricePerUnit": 42,
+    "category": "alkalinity"
+  },
+  {
+    "code": "PAC",
+    "name": "polyanionic cellulose",
+    "unit": "sack",
+    "unitPounds": 50,
+    "pricePerUnit": 96,
+    "category": "polymer"
+  },
+  {
+    "code": "LCM",
+    "name": "medium nut plug",
+    "unit": "sack",
+    "unitPounds": 50,
+    "pricePerUnit": 28,
+    "category": "lost circulation"
+  },
+  {
+    "code": "XCD",
+    "name": "xanthan gum",
+    "unit": "sack",
+    "unitPounds": 50,
+    "pricePerUnit": 210,
+    "category": "polymer"
+  }
+]
