@@ -13,6 +13,7 @@ import { checkCommand } from './commands/check.js';
 import { hydraulicsCommand } from './commands/hydraulics.js';
 import { dailyCommand } from './commands/daily.js';
 import { mixCommand } from './commands/mix.js';
+import { programmeCommand } from './commands/programme.js';
 
 function output(result, options) {
   const text = render(result, options);
@@ -113,6 +114,33 @@ export function buildProgram({ print = console.log } = {}) {
         heavyPpg: options.heavy === undefined ? null : Number(options.heavy),
         fromFraction: options.fromSolids === undefined ? null : Number(options.fromSolids),
         toFraction: options.toSolids === undefined ? null : Number(options.toSolids),
+      });
+      print(output(result, options));
+    });
+
+  program
+    .command('programme')
+    .description('print the mud programme, plan a section, or judge checks against it')
+    .requiredOption('-p, --programme <file>', 'the mud programme as json')
+    .option('-c, --checks <file>', 'a run of mud checks to judge against it')
+    .option('-s, --section <name>', 'plan this section')
+    .option('-t, --treatments <file>', 'treatment rates per barrel, for a plan')
+    .option('-P, --products <file>', 'the price list, for a plan')
+    .option('--system <bbl>', 'the surface system volume, for a plan', '500')
+    .option('-f, --format <format>', 'text or json', 'text')
+    .option('-o, --out <file>', 'write to a file instead of the screen')
+    .action((options) => {
+      const result = programmeCommand({
+        programme: readJson(options.programme),
+        checks: options.checks ? readJson(options.checks) : null,
+        plan: options.section
+          ? {
+              section: options.section,
+              treatments: readJson(options.treatments),
+              products: readJson(options.products),
+              surfaceSystemBbl: Number(options.system),
+            }
+          : null,
       });
       print(output(result, options));
     });

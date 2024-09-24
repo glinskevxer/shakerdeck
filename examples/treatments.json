@@ -1,0 +1,6 @@
+[
+  { "code": "BAR", "perBarrel": 0.6 },
+  { "code": "PAC", "perBarrel": 0.03 },
+  { "code": "XCD", "perBarrel": 0.01 },
+  { "code": "CAU", "perBarrel": 0.015 }
+]

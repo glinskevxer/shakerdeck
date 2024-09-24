@@ -1,0 +1,68 @@
+[
+  {
+    "well": "brazos 14-3",
+    "date": "2024-08-14",
+    "depthFeet": 8100,
+    "weightPpg": 12.1,
+    "funnelSeconds": 45,
+    "ph": 9.4,
+    "dials": { "600": 58, "300": 37 },
+    "filtrate": { "apiMl": 5.2 },
+    "sandPercent": 0.25
+  },
+  {
+    "well": "brazos 14-3",
+    "date": "2024-08-15",
+    "depthFeet": 8600,
+    "weightPpg": 12.2,
+    "funnelSeconds": 46,
+    "ph": 9.5,
+    "dials": { "600": 60, "300": 38 },
+    "filtrate": { "apiMl": 5.0 },
+    "sandPercent": 0.25
+  },
+  {
+    "well": "brazos 14-3",
+    "date": "2024-08-16",
+    "depthFeet": 9100,
+    "weightPpg": 12.2,
+    "funnelSeconds": 47,
+    "ph": 9.5,
+    "dials": { "600": 62, "300": 40 },
+    "filtrate": { "apiMl": 5.4 },
+    "sandPercent": 0.3
+  },
+  {
+    "well": "brazos 14-3",
+    "date": "2024-08-17",
+    "depthFeet": 9630,
+    "weightPpg": 12.3,
+    "funnelSeconds": 47,
+    "ph": 9.6,
+    "dials": { "600": 63, "300": 41 },
+    "filtrate": { "apiMl": 5.6 },
+    "sandPercent": 0.3
+  },
+  {
+    "well": "brazos 14-3",
+    "date": "2024-08-18",
+    "depthFeet": 10050,
+    "weightPpg": 12.3,
+    "funnelSeconds": 48,
+    "ph": 9.6,
+    "dials": { "600": 64, "300": 42 },
+    "filtrate": { "apiMl": 6.2 },
+    "sandPercent": 0.35
+  },
+  {
+    "well": "brazos 14-3",
+    "date": "2024-08-19",
+    "depthFeet": 10450,
+    "weightPpg": 12.4,
+    "funnelSeconds": 48,
+    "ph": 9.6,
+    "dials": { "600": 64, "300": 42 },
+    "filtrate": { "apiMl": 4.8 },
+    "sandPercent": 0.25
+  }
+]
