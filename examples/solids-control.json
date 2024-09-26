@@ -1,0 +1,30 @@
+{
+  "well": "brazos 14-3",
+  "flowGpm": 600,
+  "bitDiameterInches": 8.5,
+  "footageFeet": 820,
+  "washoutFraction": 0.1,
+  "distribution": [
+    { "lowMicrons": 0, "highMicrons": 20, "share": 0.1 },
+    { "lowMicrons": 20, "highMicrons": 74, "share": 0.2 },
+    { "lowMicrons": 74, "highMicrons": 150, "share": 0.25 },
+    { "lowMicrons": 150, "highMicrons": 400, "share": 0.3 },
+    { "lowMicrons": 400, "highMicrons": 2000, "share": 0.15 }
+  ],
+  "shakers": [{ "apiNumber": 170 }, { "apiNumber": 200 }],
+  "cones": [
+    { "type": "desander", "cones": 3 },
+    { "type": "desilter", "cones": 16 }
+  ],
+  "centrifuge": {
+    "mudGpm": 60,
+    "waterGpm": 20,
+    "underflowPpg": 21,
+    "overflowPpg": 9.6,
+    "hours": 12
+  },
+  "mudPpg": 12.4,
+  "targetSolidsFraction": 0.05,
+  "mudCostPerBbl": 38,
+  "removalCostPerBbl": 65
+}

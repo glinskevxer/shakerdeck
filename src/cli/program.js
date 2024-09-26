@@ -14,6 +14,7 @@ import { hydraulicsCommand } from './commands/hydraulics.js';
 import { dailyCommand } from './commands/daily.js';
 import { mixCommand } from './commands/mix.js';
 import { programmeCommand } from './commands/programme.js';
+import { solidsCommand } from './commands/solids.js';
 
 function output(result, options) {
   const text = render(result, options);
@@ -143,6 +144,16 @@ export function buildProgram({ print = console.log } = {}) {
           : null,
       });
       print(output(result, options));
+    });
+
+  program
+    .command('solids')
+    .description('run the solids control spread over a day of cuttings')
+    .requiredOption('-s, --spread <file>', 'the solids control spread as json')
+    .option('-f, --format <format>', 'text or json', 'text')
+    .option('-o, --out <file>', 'write to a file instead of the screen')
+    .action((options) => {
+      print(output(solidsCommand(readJson(options.spread)), options));
     });
 
   return program;
