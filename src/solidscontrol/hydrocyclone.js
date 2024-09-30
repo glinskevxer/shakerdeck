@@ -12,7 +12,7 @@
  * good the cut point is.
  */
 import { toPositive, toNonNegative, round } from '../util/number.js';
-import { removalShare } from './screens.js';
+import { removalShare, passedDistribution } from './screens.js';
 
 /**
  * Cone sizes and what each one does, from the manufacturers' figures.
@@ -85,6 +85,7 @@ export function conePerformance({ type, cones, flowGpm, distribution, solidsBbl 
     removedBbl: round(solids * share, 2),
     passedBbl: round(solids * (1 - share), 2),
     fullyProcessing: bank.fullyProcessing,
+    passedDistribution: passedDistribution(distribution, cone.cutMicrons),
   };
 }
 
@@ -95,11 +96,13 @@ export function conePerformance({ type, cones, flowGpm, distribution, solidsBbl 
  */
 export function trainPerformance({ stages, distribution, solidsBbl }) {
   let remaining = toNonNegative(solidsBbl, 'solidsBbl');
+  let sizes = distribution;
   const rows = [];
   for (const stage of stages) {
-    const result = conePerformance({ ...stage, distribution, solidsBbl: remaining });
+    const result = conePerformance({ ...stage, distribution: sizes, solidsBbl: remaining });
     rows.push({ ...result, feedBbl: round(remaining, 2) });
     remaining = result.passedBbl;
+    sizes = result.passedDistribution;
   }
   return {
     stages: rows,

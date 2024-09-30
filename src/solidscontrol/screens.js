@@ -115,6 +115,42 @@ export function removalShare(distribution, cutMicrons) {
 }
 
 /**
+ * The size distribution of what got through.
+ *
+ * This is the piece that was missing. A stage does not see the same
+ * distribution the one before it saw: everything coarser than the last cut
+ * point has already gone. Running each stage against the original
+ * distribution counts the same coarse solids again at every stage and reports
+ * a spread removing ninety nine percent of what a rig actually removes half
+ * of.
+ */
+export function passedDistribution(distribution, cutMicrons) {
+  const cut = toPositive(cutMicrons, 'cutMicrons');
+  const rows = [];
+  for (const band of distribution) {
+    const share = toNonNegative(band?.share, 'share');
+    const low = toNonNegative(band?.lowMicrons, 'lowMicrons');
+    const high = toPositive(band?.highMicrons, 'highMicrons');
+    if (high <= low) {
+      throw new Error(`a band from ${low} to ${high} microns runs backwards`);
+    }
+    if (low >= cut) {
+      continue;
+    }
+    if (high <= cut) {
+      rows.push({ lowMicrons: low, highMicrons: high, share });
+      continue;
+    }
+    rows.push({
+      lowMicrons: low,
+      highMicrons: cut,
+      share: (share * (cut - low)) / (high - low),
+    });
+  }
+  return rows;
+}
+
+/**
  * What a screen does to a flow of drilled solids.
  */
 export function screenPerformance({ apiNumber, distribution, solidsBbl }) {
@@ -127,6 +163,7 @@ export function screenPerformance({ apiNumber, distribution, solidsBbl }) {
     removalShare: round(share, 3),
     removedBbl: round(solids * share, 2),
     passedBbl: round(solids * (1 - share), 2),
+    passedDistribution: passedDistribution(distribution, band.midpoint),
   };
 }
 

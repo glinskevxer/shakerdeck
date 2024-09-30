@@ -129,6 +129,18 @@ describe('trainPerformance', () => {
     expect(train.stages[1].feedBbl).toBe(train.stages[0].passedBbl);
   });
 
+  it('feeds each stage the sizes the last one left, not the original spread', () => {
+    const second = train.stages[1];
+    const alone = conePerformance({
+      type: 'desilter',
+      cones: 16,
+      flowGpm: 600,
+      distribution,
+      solidsBbl: second.feedBbl,
+    });
+    expect(second.removedBbl).toBeLessThan(alone.removedBbl);
+  });
+
   it('removes more than either stage alone', () => {
     const desanderOnly = conePerformance({
       type: 'desander',

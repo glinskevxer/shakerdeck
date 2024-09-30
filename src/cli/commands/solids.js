@@ -24,11 +24,12 @@ export function readSolidsControl(spread) {
     washoutFraction: spread.washoutFraction ?? 0,
   });
   let remaining = made.barrels;
+  let sizes = spread.distribution;
   const stages = [];
   for (const shaker of spread.shakers ?? []) {
     const result = screenPerformance({
       apiNumber: shaker.apiNumber,
-      distribution: spread.distribution,
+      distribution: sizes,
       solidsBbl: remaining,
     });
     stages.push({
@@ -39,11 +40,12 @@ export function readSolidsControl(spread) {
       cutMicrons: result.cutMicrons,
     });
     remaining = result.passedBbl;
+    sizes = result.passedDistribution;
   }
   if (spread.cones && spread.cones.length > 0) {
     const train = trainPerformance({
       stages: spread.cones.map((cone) => ({ ...cone, flowGpm: spread.flowGpm })),
-      distribution: spread.distribution,
+      distribution: sizes,
       solidsBbl: remaining,
     });
     for (const stage of train.stages) {

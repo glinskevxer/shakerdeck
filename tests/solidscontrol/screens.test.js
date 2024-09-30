@@ -5,6 +5,7 @@ import {
   designationFor,
   finestScreenFor,
   removalShare,
+  passedDistribution,
   screenPerformance,
   compareScreens,
 } from '../../src/solidscontrol/screens.js';
@@ -112,6 +113,41 @@ describe('removalShare', () => {
   });
 });
 
+describe('passedDistribution', () => {
+  it('drops every band above the cut', () => {
+    const passed = passedDistribution(distribution, 74);
+    expect(passed.map((band) => band.highMicrons)).toEqual([20, 74]);
+  });
+
+  it('cuts the band the cut point falls inside', () => {
+    const passed = passedDistribution(distribution, 100);
+    const partial = passed.at(-1);
+    expect(partial.highMicrons).toBe(100);
+    expect(partial.share).toBeCloseTo((0.25 * (100 - 74)) / (150 - 74), 6);
+  });
+
+  it('keeps everything with a cut above the coarsest band', () => {
+    expect(passedDistribution(distribution, 3000)).toHaveLength(5);
+  });
+
+  it('keeps nothing at all with a cut below the finest', () => {
+    expect(passedDistribution(distribution, 0.0001)[0].share).toBeCloseTo(0, 5);
+  });
+
+  it('agrees with the removal share it came from', () => {
+    const cut = 74;
+    const removed = removalShare(distribution, cut);
+    const left = passedDistribution(distribution, cut).reduce((sum, band) => sum + band.share, 0);
+    expect(left).toBeCloseTo(1 - removed, 6);
+  });
+
+  it('refuses a band that runs backwards', () => {
+    expect(() => passedDistribution([{ lowMicrons: 100, highMicrons: 50, share: 1 }], 60)).toThrow(
+      /runs backwards/
+    );
+  });
+});
+
 describe('screenPerformance', () => {
   it('splits the solids at the screen', () => {
     const result = screenPerformance({ apiNumber: 200, distribution, solidsBbl: 100 });
@@ -127,6 +163,13 @@ describe('screenPerformance', () => {
 
   it('takes nothing out of nothing', () => {
     expect(screenPerformance({ apiNumber: 200, distribution, solidsBbl: 0 }).removedBbl).toBe(0);
+  });
+
+  it('hands the next stage the sizes that actually got through', () => {
+    const result = screenPerformance({ apiNumber: 200, distribution, solidsBbl: 100 });
+    expect(result.passedDistribution.every((band) => band.highMicrons <= result.cutMicrons)).toBe(
+      true
+    );
   });
 });
 

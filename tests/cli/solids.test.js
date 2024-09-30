@@ -59,6 +59,14 @@ describe('readSolidsControl', () => {
     expect(shakersOnly.stages).toHaveLength(2);
   });
 
+  it('never removes more than the coarse solids that were there', () => {
+    const finest = Math.min(...data.stages.map((row) => row.cutMicrons));
+    const belowTheFinest = spread.distribution
+      .filter((band) => band.highMicrons <= finest)
+      .reduce((sum, band) => sum + band.share, 0);
+    expect(data.passedBbl / data.solidsMadeBbl).toBeGreaterThanOrEqual(belowTheFinest - 0.001);
+  });
+
   it('compares what it did against dilution alone', () => {
     expect(data.comparison.dilutionOnlyBbl).toBeGreaterThan(data.comparison.withRemovalBbl);
   });
