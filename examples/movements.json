@@ -1,0 +1,17 @@
+[
+  { "date": "2024-11-12", "code": "BAR", "kind": "received", "quantity": 400 },
+  { "date": "2024-11-13", "code": "BAR", "kind": "used", "quantity": 260 },
+  { "date": "2024-11-13", "code": "CAU", "kind": "used", "quantity": 8 },
+  { "date": "2024-11-14", "code": "PAC", "kind": "used", "quantity": 12 },
+  {
+    "date": "2024-11-14",
+    "code": "BAR",
+    "kind": "transferred",
+    "quantity": 40,
+    "note": "to the next rig"
+  },
+  { "date": "2024-11-15", "code": "BAR", "kind": "used", "quantity": 140 },
+  { "date": "2024-11-15", "code": "PAC", "kind": "used", "quantity": 6 },
+  { "date": "2024-11-16", "code": "XCD", "kind": "used", "quantity": 4 },
+  { "date": "2024-11-16", "code": "LCM", "kind": "used", "quantity": 30 }
+]

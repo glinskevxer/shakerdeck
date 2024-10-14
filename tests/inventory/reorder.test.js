@@ -52,6 +52,10 @@ describe('daysOfCover', () => {
   it('is nothing when the shelf is empty', () => {
     expect(daysOfCover(0, 20)).toBe(0);
   });
+
+  it('is nothing on a balance that came back negative', () => {
+    expect(daysOfCover(-40, 20)).toBe(0);
+  });
 });
 
 describe('reorderPoint', () => {
@@ -85,6 +89,11 @@ describe('orderQuantity', () => {
     const order = orderQuantity({ stock: 5, dailyUse: 3.4, leadTimeDays: 3, coverDays: 10 });
     expect(Number.isInteger(order.order)).toBe(true);
     expect(order.order).toBe(29);
+  });
+
+  it('orders against a balance that came back negative', () => {
+    const order = orderQuantity({ stock: -40, dailyUse: 10, leadTimeDays: 3, coverDays: 14 });
+    expect(order.order).toBe(140);
   });
 
   it('never orders a negative quantity', () => {

@@ -7,7 +7,7 @@
  * is actually being used rather than sitting at a figure somebody set on spud
  * day.
  */
-import { toPositive, toNonNegative, round } from '../util/number.js';
+import { toNumber, toPositive, toNonNegative, round } from '../util/number.js';
 
 /**
  * Average daily use over a run of days.
@@ -27,7 +27,10 @@ export function burnRate(usageByDay) {
  * Days of cover left at the current burn.
  */
 export function daysOfCover(stock, dailyUse) {
-  const held = toNonNegative(stock, 'stock');
+  // A closing balance can come back negative when the opening stock was wrong,
+  // and the ordering report is exactly where that has to be visible. Throwing
+  // on it hid the one product the report existed to flag.
+  const held = Math.max(0, toNumber(stock, 'stock'));
   const use = toNonNegative(dailyUse, 'dailyUse');
   if (use === 0) {
     return null;
@@ -50,7 +53,7 @@ export function reorderPoint({ dailyUse, leadTimeDays, safetyDays = 2 }) {
  */
 export function orderQuantity({ stock, dailyUse, leadTimeDays, coverDays, safetyDays = 2 }) {
   const point = reorderPoint({ dailyUse, leadTimeDays, safetyDays });
-  const held = toNonNegative(stock, 'stock');
+  const held = Math.max(0, toNumber(stock, 'stock'));
   if (held > point) {
     return { order: 0, reorderPoint: round(point, 1), reason: 'above the reorder point' };
   }

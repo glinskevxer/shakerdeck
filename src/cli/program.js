@@ -15,6 +15,7 @@ import { dailyCommand } from './commands/daily.js';
 import { mixCommand } from './commands/mix.js';
 import { programmeCommand } from './commands/programme.js';
 import { solidsCommand } from './commands/solids.js';
+import { stockCommand } from './commands/stock.js';
 
 function output(result, options) {
   const text = render(result, options);
@@ -154,6 +155,27 @@ export function buildProgram({ print = console.log } = {}) {
     .option('-o, --out <file>', 'write to a file instead of the screen')
     .action((options) => {
       print(output(solidsCommand(readJson(options.spread)), options));
+    });
+
+  program
+    .command('stock')
+    .description('run the product movements and report what needs ordering')
+    .requiredOption('-P, --products <file>', 'the price list as json')
+    .requiredOption('-m, --movements <file>', 'the movements as json')
+    .option('-b, --opening <file>', 'the opening stock as json')
+    .option('--lead <days>', 'lead time from the yard in days', '3')
+    .option('--cover <days>', 'days of cover to order up to', '14')
+    .option('-f, --format <format>', 'text or json', 'text')
+    .option('-o, --out <file>', 'write to a file instead of the screen')
+    .action((options) => {
+      const result = stockCommand({
+        products: readJson(options.products),
+        movements: readJson(options.movements),
+        opening: options.opening ? readJson(options.opening) : {},
+        leadTimeDays: Number(options.lead),
+        coverDays: Number(options.cover),
+      });
+      print(output(result, options));
     });
 
   return program;
