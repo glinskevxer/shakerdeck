@@ -16,6 +16,7 @@ import { mixCommand } from './commands/mix.js';
 import { programmeCommand } from './commands/programme.js';
 import { solidsCommand } from './commands/solids.js';
 import { stockCommand } from './commands/stock.js';
+import { commandsCommand } from './commands/commands.js';
 
 function output(result, options) {
   const text = render(result, options);
@@ -176,6 +177,15 @@ export function buildProgram({ print = console.log } = {}) {
         coverDays: Number(options.cover),
       });
       print(output(result, options));
+    });
+
+  program
+    .command('commands')
+    .description('list every command this tool carries')
+    .option('-v, --verbose', 'list the options of each command as well')
+    .option('-f, --format <format>', 'text or json', 'text')
+    .action((options) => {
+      print(output(commandsCommand(program, { verbose: Boolean(options.verbose) }), options));
     });
 
   return program;
