@@ -1,0 +1,111 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: lint and format on node ${{ matrix.node }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['20.18.2', '22.13.1']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run format:check
+
+  test:
+    name: test on node ${{ matrix.node }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['20.18.2', '22.13.1']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - name: the suite has not quietly shrunk
+        run: |
+          npx vitest run --reporter=json --outputFile=/tmp/vitest.json >/dev/null 2>&1 || true
+          count=$(node -e "process.stdout.write(String(require('/tmp/vitest.json').numTotalTests))")
+          echo "$count tests"
+          if [ "$count" -lt 1000 ]; then
+            echo "the suite has fallen below the floor of 1000 tests" >&2
+            exit 1
+          fi
+
+  coverage:
+    name: coverage thresholds
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.18.2'
+          cache: npm
+      - run: npm ci
+      - run: npm run coverage
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage
+          path: coverage/
+          retention-days: 7
+
+  smoke:
+    name: command line smoke test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.18.2'
+          cache: npm
+      - run: npm ci
+      - run: npm run smoke
+      - name: every command describes itself
+        run: |
+          node bin/shakerdeck.js commands --format json > /tmp/commands.json
+          node -e "
+            const rows = require('/tmp/commands.json');
+            const thin = rows.filter((row) => !row.description || row.description.length < 16);
+            if (thin.length) {
+              console.error('undescribed: ' + thin.map((r) => r.command).join(', '));
+              process.exit(1);
+            }
+            console.log(rows.length + ' commands, all described');
+          "
+
+  audit:
+    name: dependency advisories
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.18.2'
+          cache: npm
+      - run: npm ci
+      - run: npm run audit
