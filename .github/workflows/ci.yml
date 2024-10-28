@@ -109,3 +109,33 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run audit
+
+  image:
+    name: container image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: build
+        run: docker build -t shakerdeck:ci .
+      - name: the entry point runs inside it
+        run: docker run --rm shakerdeck:ci commands
+      - name: and so do the examples it carries
+        run: |
+          docker run --rm shakerdeck:ci check -c examples/check-brazos.json
+          docker run --rm shakerdeck:ci hydraulics -w examples/well-brazos.json -c examples/check-brazos.json
+          docker run --rm shakerdeck:ci solids -s examples/solids-control.json
+      - name: it is not running as root
+        run: |
+          user="$(docker run --rm --entrypoint id shakerdeck:ci -un)"
+          if [ "$user" = "root" ]; then
+            echo "the image runs as root" >&2
+            exit 1
+          fi
+          echo "runs as $user"
+      - name: the image carries no development dependency
+        run: |
+          if docker run --rm --entrypoint ls shakerdeck:ci /app/node_modules | grep -q '^vitest$'; then
+            echo "vitest is in the image" >&2
+            exit 1
+          fi
+          echo "no test runner in the image"
