@@ -17,6 +17,7 @@ import { programmeCommand } from './commands/programme.js';
 import { solidsCommand } from './commands/solids.js';
 import { stockCommand } from './commands/stock.js';
 import { commandsCommand } from './commands/commands.js';
+import { recapCommand } from './commands/recap.js';
 
 function output(result, options) {
   const text = render(result, options);
@@ -186,6 +187,28 @@ export function buildProgram({ print = console.log } = {}) {
     .option('-f, --format <format>', 'text or json', 'text')
     .action((options) => {
       print(output(commandsCommand(program, { verbose: Boolean(options.verbose) }), options));
+    });
+
+  program
+    .command('recap')
+    .description('write the end of well recap off every check and every day')
+    .requiredOption('-c, --checks <file>', 'the run of mud checks as json')
+    .option('-w, --well <name>', 'the well name for the heading')
+    .option('-p, --programme <file>', 'the mud programme as json')
+    .option('-d, --days <file>', 'the daily records as json')
+    .option('-P, --products <file>', 'the price list as json')
+    .option('-f, --format <format>', 'text or json', 'text')
+    .option('-o, --out <file>', 'write to a file instead of the screen')
+    .action((options) => {
+      const checks = readJson(options.checks);
+      const result = recapCommand({
+        well: options.well ?? checks[0]?.well ?? 'the well',
+        checks,
+        programme: options.programme ? readJson(options.programme) : null,
+        days: options.days ? readJson(options.days) : null,
+        products: options.products ? readJson(options.products) : null,
+      });
+      print(output(result, options));
     });
 
   return program;

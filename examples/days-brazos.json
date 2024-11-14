@@ -1,0 +1,51 @@
+[
+  {
+    "date": "2024-08-14",
+    "footageFeet": 620,
+    "mudBuiltBbl": 140,
+    "serviceCharge": 1450,
+    "rentalCharge": 320,
+    "used": { "BAR": 120, "CAU": 6, "PAC": 10 }
+  },
+  {
+    "date": "2024-08-15",
+    "footageFeet": 500,
+    "mudBuiltBbl": 110,
+    "serviceCharge": 1450,
+    "rentalCharge": 320,
+    "used": { "BAR": 90, "CAU": 8, "PAC": 12 }
+  },
+  {
+    "date": "2024-08-16",
+    "footageFeet": 500,
+    "mudBuiltBbl": 130,
+    "serviceCharge": 1450,
+    "rentalCharge": 320,
+    "used": { "BAR": 260, "CAU": 8, "PAC": 12 }
+  },
+  {
+    "date": "2024-08-17",
+    "footageFeet": 530,
+    "mudBuiltBbl": 120,
+    "serviceCharge": 1450,
+    "rentalCharge": 320,
+    "haulageCharge": 900,
+    "used": { "BAR": 140, "PAC": 6, "LCM": 30 }
+  },
+  {
+    "date": "2024-08-18",
+    "footageFeet": 420,
+    "mudBuiltBbl": 90,
+    "serviceCharge": 1450,
+    "rentalCharge": 320,
+    "used": { "BAR": 100, "CAU": 4, "XCD": 4 }
+  },
+  {
+    "date": "2024-08-19",
+    "footageFeet": 400,
+    "mudBuiltBbl": 180,
+    "serviceCharge": 1450,
+    "rentalCharge": 320,
+    "used": { "BAR": 260, "CAU": 8, "PAC": 12 }
+  }
+]

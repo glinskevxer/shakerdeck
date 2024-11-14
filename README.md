@@ -23,7 +23,7 @@ on a rig laptop with no connection.
 - judges a run of checks against the mud programme and finds the window nobody
   is meeting
 - runs product stock, values what was used and says what needs ordering
-- builds the daily mud report
+- builds the daily mud report and the end of well recap
 
 ## Getting started
 
@@ -113,6 +113,14 @@ Runs the product movements and reports what needs ordering.
 
 ```
 node bin/shakerdeck.js stock -P examples/products.json -m examples/movements.json -b examples/opening-stock.json
+```
+
+### recap
+
+Writes the end of well recap off every check and every day.
+
+```
+node bin/shakerdeck.js recap -c examples/checks-brazos.json -p examples/programme-brazos.json -d examples/days-brazos.json -P examples/products.json
 ```
 
 ### commands
