@@ -123,6 +123,16 @@ Writes the end of well recap off every check and every day.
 node bin/shakerdeck.js recap -c examples/checks-brazos.json -p examples/programme-brazos.json -d examples/days-brazos.json -P examples/products.json
 ```
 
+### export
+
+Writes a table out as a comma separated file.
+
+```
+node bin/shakerdeck.js export -t checks -i examples/checks-brazos.json
+node bin/shakerdeck.js export -t days -i examples/days-brazos.json -P examples/products.json
+node bin/shakerdeck.js export -t stock -i examples/movements.json -P examples/products.json -b examples/opening-stock.json
+```
+
 ### commands
 
 ```

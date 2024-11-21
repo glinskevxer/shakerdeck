@@ -18,6 +18,7 @@ import { solidsCommand } from './commands/solids.js';
 import { stockCommand } from './commands/stock.js';
 import { commandsCommand } from './commands/commands.js';
 import { recapCommand } from './commands/recap.js';
+import { exportCommand } from './commands/export.js';
 
 function output(result, options) {
   const text = render(result, options);
@@ -209,6 +210,29 @@ export function buildProgram({ print = console.log } = {}) {
         products: options.products ? readJson(options.products) : null,
       });
       print(output(result, options));
+    });
+
+  program
+    .command('export')
+    .description('write a table out as a comma separated file')
+    .requiredOption('-t, --table <table>', 'checks, days or stock')
+    .requiredOption('-i, --input <file>', 'the records to write out')
+    .option('-P, --products <file>', 'the price list, for days and stock')
+    .option('-b, --opening <file>', 'the opening stock, for stock')
+    .option('-o, --out <file>', 'write to a file instead of the screen')
+    .action((options) => {
+      const result = exportCommand({
+        table: options.table,
+        input: readJson(options.input),
+        products: options.products ? readJson(options.products) : null,
+        opening: options.opening ? readJson(options.opening) : {},
+      });
+      if (options.out) {
+        writeText(options.out, result.data);
+        print(`written to ${options.out}`);
+        return;
+      }
+      print(result.lines.join('\n'));
     });
 
   return program;

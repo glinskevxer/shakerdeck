@@ -55,7 +55,9 @@ describe('every command describes itself', () => {
   });
 
   it('offers a format option wherever it prints a report', () => {
-    const reporting = rows.filter((row) => row.command !== 'mix');
+    // mix takes its inputs as flags rather than a file, and export writes one
+    // format only, so neither of them has anything to switch between.
+    const reporting = rows.filter((row) => row.command !== 'mix' && row.command !== 'export');
     for (const row of reporting) {
       expect(row.options.map((option) => option.flags).join(' ')).toContain('--format');
     }

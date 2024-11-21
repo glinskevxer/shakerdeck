@@ -33,6 +33,9 @@ run programme -p examples/programme-brazos.json -s intermediate -t examples/trea
 run solids -s examples/solids-control.json
 run stock -P examples/products.json -m examples/movements.json -b examples/opening-stock.json
 run recap -c examples/checks-brazos.json -p examples/programme-brazos.json -d examples/days-brazos.json -P examples/products.json
+run export -t checks -i examples/checks-brazos.json
+run export -t days -i examples/days-brazos.json -P examples/products.json
+run export -t stock -i examples/movements.json -P examples/products.json -b examples/opening-stock.json
 run commands
 run commands -v
 
