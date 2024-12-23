@@ -123,6 +123,17 @@ Writes the end of well recap off every check and every day.
 node bin/shakerdeck.js recap -c examples/checks-brazos.json -p examples/programme-brazos.json -d examples/days-brazos.json -P examples/products.json
 ```
 
+### pits
+
+Totals the active system over a tour and reads the changes.
+
+```
+node bin/shakerdeck.js pits -p examples/pits-brazos.json
+```
+
+Only the tanks that are lined up count towards the total, so a transfer into
+the reserve does not read as a gain.
+
 ### export
 
 Writes a table out as a comma separated file.

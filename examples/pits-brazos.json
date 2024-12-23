@@ -1,0 +1,79 @@
+{
+  "well": "brazos 14-3",
+  "tanks": [
+    {
+      "name": "suction",
+      "shape": "sloped",
+      "lengthFeet": 24,
+      "widthFeet": 10,
+      "bottomWidthFeet": 4,
+      "slopeHeightFeet": 3
+    },
+    {
+      "name": "intermediate",
+      "shape": "sloped",
+      "lengthFeet": 24,
+      "widthFeet": 10,
+      "bottomWidthFeet": 4,
+      "slopeHeightFeet": 3
+    },
+    { "name": "shaker", "shape": "rectangular", "lengthFeet": 20, "widthFeet": 10 },
+    {
+      "name": "reserve",
+      "shape": "rectangular",
+      "lengthFeet": 30,
+      "widthFeet": 12,
+      "active": false
+    },
+    {
+      "name": "trip tank",
+      "shape": "horizontal cylinder",
+      "diameterFeet": 6,
+      "lengthFeet": 20,
+      "active": false
+    }
+  ],
+  "readings": [
+    {
+      "time": "00:00",
+      "levels": {
+        "suction": 6.2,
+        "intermediate": 6.0,
+        "shaker": 4.8,
+        "reserve": 7.0,
+        "trip tank": 3.0
+      }
+    },
+    {
+      "time": "06:00",
+      "levels": {
+        "suction": 6.1,
+        "intermediate": 5.9,
+        "shaker": 4.7,
+        "reserve": 7.0,
+        "trip tank": 3.0
+      }
+    },
+    {
+      "time": "12:00",
+      "levels": {
+        "suction": 5.7,
+        "intermediate": 5.6,
+        "shaker": 4.5,
+        "reserve": 7.0,
+        "trip tank": 3.0
+      }
+    },
+    {
+      "time": "18:00",
+      "levels": {
+        "suction": 5.7,
+        "intermediate": 5.6,
+        "shaker": 4.5,
+        "reserve": 7.0,
+        "trip tank": 3.2
+      }
+    }
+  ],
+  "thresholdBbl": 10
+}

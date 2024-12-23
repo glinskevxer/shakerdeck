@@ -19,6 +19,7 @@ import { stockCommand } from './commands/stock.js';
 import { commandsCommand } from './commands/commands.js';
 import { recapCommand } from './commands/recap.js';
 import { exportCommand } from './commands/export.js';
+import { pitsCommand } from './commands/pits.js';
 
 function output(result, options) {
   const text = render(result, options);
@@ -233,6 +234,21 @@ export function buildProgram({ print = console.log } = {}) {
         return;
       }
       print(result.lines.join('\n'));
+    });
+
+  program
+    .command('pits')
+    .description('total the active system over a tour and read the changes')
+    .requiredOption('-p, --pits <file>', 'the tanks and the level readings as json')
+    .option('--threshold <bbl>', 'the change worth flagging')
+    .option('-f, --format <format>', 'text or json', 'text')
+    .option('-o, --out <file>', 'write to a file instead of the screen')
+    .action((options) => {
+      const input = readJson(options.pits);
+      if (options.threshold !== undefined) {
+        input.thresholdBbl = Number(options.threshold);
+      }
+      print(output(pitsCommand(input), options));
     });
 
   return program;
