@@ -20,6 +20,7 @@ import { commandsCommand } from './commands/commands.js';
 import { recapCommand } from './commands/recap.js';
 import { exportCommand } from './commands/export.js';
 import { pitsCommand } from './commands/pits.js';
+import { killCommand } from './commands/kill.js';
 
 function output(result, options) {
   const text = render(result, options);
@@ -249,6 +250,23 @@ export function buildProgram({ print = console.log } = {}) {
         input.thresholdBbl = Number(options.threshold);
       }
       print(output(pitsCommand(input), options));
+    });
+
+  program
+    .command('kill')
+    .description('work the mud side of a kill sheet and the mud to build for it')
+    .requiredOption('-k, --kill <file>', 'the shut in readings as json')
+    .option('--system <bbl>', 'the system volume, to work the barite out')
+    .option('-a, --agent <agent>', 'the weighting agent', 'barite')
+    .option('-f, --format <format>', 'text or json', 'text')
+    .option('-o, --out <file>', 'write to a file instead of the screen')
+    .action((options) => {
+      const input = readJson(options.kill);
+      if (options.system !== undefined) {
+        input.systemBbl = Number(options.system);
+      }
+      input.agent = options.agent;
+      print(output(killCommand(input), options));
     });
 
   return program;

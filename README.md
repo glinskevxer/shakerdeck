@@ -24,6 +24,7 @@ on a rig laptop with no connection.
   is meeting
 - runs product stock, values what was used and says what needs ordering
 - builds the daily mud report and the end of well recap
+- works the mud side of a kill sheet
 
 ## Getting started
 
@@ -133,6 +134,16 @@ node bin/shakerdeck.js pits -p examples/pits-brazos.json
 
 Only the tanks that are lined up count towards the total, so a transfer into
 the reserve does not read as a gain.
+
+### kill
+
+Works the mud side of a kill sheet: the weight, the circulating pressures, the
+step down schedule, what the influx looks like and what the shoe will take.
+
+```
+node bin/shakerdeck.js kill -k examples/kill-brazos.json
+node bin/shakerdeck.js kill -k examples/kill-brazos.json --system 800
+```
 
 ### export
 

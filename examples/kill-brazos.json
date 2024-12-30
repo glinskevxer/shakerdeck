@@ -1,0 +1,14 @@
+{
+  "well": "brazos 14-3",
+  "currentPpg": 12.4,
+  "shutInDrillPipePsi": 400,
+  "shutInCasingPsi": 700,
+  "tvdFeet": 10200,
+  "slowPumpPsi": 650,
+  "stringStrokes": 1970,
+  "gainBbl": 20,
+  "annularCapacityBblPerFoot": 0.0459,
+  "leakOffPpg": 14.5,
+  "shoeTvdFeet": 6000,
+  "steps": 10
+}
