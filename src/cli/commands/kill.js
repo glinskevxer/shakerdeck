@@ -66,6 +66,12 @@ export function renderKill(data) {
       data.schedule
     ),
   ];
+  if (!data.checks.clean) {
+    lines.push('', heading('before this sheet is used'));
+    for (const note of data.checks.notes) {
+      lines.push(`  ${note}`);
+    }
+  }
   if (data.barite) {
     lines.push(
       '',

@@ -5,6 +5,7 @@ import {
   stepDown,
   maximumAnnularPressure,
   influxGradient,
+  sheetChecks,
   killSheet,
 } from '../../src/wellcontrol/killsheet.js';
 
@@ -108,7 +109,7 @@ describe('influxGradient', () => {
     const influx = influxGradient({
       gainBbl: 20,
       shutInDrillPipePsi: 400,
-      shutInCasingPsi: 700,
+      shutInCasingPsi: 620,
       annularCapacityBblPerFoot: 0.0459,
       mudPpg: 12.4,
     });
@@ -121,7 +122,7 @@ describe('influxGradient', () => {
       influxGradient({
         gainBbl: 20,
         shutInDrillPipePsi: 400,
-        shutInCasingPsi: 420,
+        shutInCasingPsi: 430,
         annularCapacityBblPerFoot: 0.0459,
         mudPpg: 12.4,
       }).kind
@@ -133,11 +134,35 @@ describe('influxGradient', () => {
       influxGradient({
         gainBbl: 20,
         shutInDrillPipePsi: 400,
-        shutInCasingPsi: 560,
+        shutInCasingPsi: 530,
         annularCapacityBblPerFoot: 0.0459,
         mudPpg: 12.4,
       }).kind
     ).toBe('oil');
+  });
+
+  it('flags readings that do not go together rather than calling them gas', () => {
+    const wrong = influxGradient({
+      gainBbl: 20,
+      shutInDrillPipePsi: 400,
+      shutInCasingPsi: 1000,
+      annularCapacityBblPerFoot: 0.0459,
+      mudPpg: 12.4,
+    });
+    expect(wrong.impossible).toBe(true);
+    expect(wrong.kind).toMatch(/do not go together/);
+  });
+
+  it('marks a sound reading as possible', () => {
+    expect(
+      influxGradient({
+        gainBbl: 20,
+        shutInDrillPipePsi: 400,
+        shutInCasingPsi: 600,
+        annularCapacityBblPerFoot: 0.0459,
+        mudPpg: 12.4,
+      }).impossible
+    ).toBe(false);
   });
 
   it('refuses a gain of nothing', () => {
@@ -153,11 +178,54 @@ describe('influxGradient', () => {
   });
 });
 
+describe('sheetChecks', () => {
+  const sound = {
+    currentPpg: 12.4,
+    shutInDrillPipePsi: 400,
+    shutInCasingPsi: 620,
+    killPpg: 13.15,
+    leakOffPpg: 14.5,
+    influx: { impossible: false },
+  };
+
+  it('passes a sound set of readings', () => {
+    expect(sheetChecks(sound).clean).toBe(true);
+    expect(sheetChecks(sound).notes).toEqual([]);
+  });
+
+  it('catches the two gauges the wrong way round', () => {
+    const notes = sheetChecks({ ...sound, shutInCasingPsi: 300 }).notes;
+    expect(notes.join(' ')).toMatch(/wrong way round/);
+  });
+
+  it('carries the impossible influx through', () => {
+    expect(sheetChecks({ ...sound, influx: { impossible: true } }).notes.join(' ')).toMatch(
+      /one of the gain and the two pressures is wrong/
+    );
+  });
+
+  it('catches a kill weight over the leak off', () => {
+    expect(sheetChecks({ ...sound, killPpg: 15 }).notes.join(' ')).toMatch(/the shoe goes/);
+  });
+
+  it('catches a weight up that is a long way in one step', () => {
+    expect(sheetChecks({ ...sound, killPpg: 15, leakOffPpg: 18 }).notes.join(' ')).toMatch(
+      /a long way in one step/
+    );
+  });
+
+  it('works with no leak off on file', () => {
+    const without = { ...sound };
+    delete without.leakOffPpg;
+    expect(sheetChecks(without).clean).toBe(true);
+  });
+});
+
 describe('killSheet', () => {
   const sheet = killSheet({
     currentPpg: 12.4,
     shutInDrillPipePsi: 400,
-    shutInCasingPsi: 700,
+    shutInCasingPsi: 620,
     tvdFeet: 10000,
     slowPumpPsi: 650,
     stringStrokes: 1970,
@@ -178,5 +246,26 @@ describe('killSheet', () => {
   it('runs the schedule from the initial to the final pressure', () => {
     expect(sheet.schedule[0].standpipePsi).toBe(sheet.initialPsi);
     expect(sheet.schedule.at(-1).standpipePsi).toBe(sheet.finalPsi);
+  });
+
+  it('carries the cross checks on the sheet itself', () => {
+    expect(sheet.checks.clean).toBe(true);
+  });
+
+  it('flags a sheet whose readings do not go together', () => {
+    const wrong = killSheet({
+      currentPpg: 12.4,
+      shutInDrillPipePsi: 400,
+      shutInCasingPsi: 1000,
+      tvdFeet: 10000,
+      slowPumpPsi: 650,
+      stringStrokes: 1970,
+      gainBbl: 20,
+      annularCapacityBblPerFoot: 0.0459,
+      leakOffPpg: 14.5,
+      shoeTvdFeet: 6000,
+    });
+    expect(wrong.checks.clean).toBe(false);
+    expect(wrong.influx.impossible).toBe(true);
   });
 });

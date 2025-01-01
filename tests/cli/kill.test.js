@@ -70,6 +70,16 @@ describe('renderKill', () => {
     expect(renderKill(readKill(input)).join('\n')).not.toContain('BUILDING THE KILL MUD');
   });
 
+  it('prints the cross checks when they are not clean', () => {
+    const text = renderKill(readKill({ ...input, shutInCasingPsi: 1000 })).join('\n');
+    expect(text).toContain('BEFORE THIS SHEET IS USED');
+    expect(text).toMatch(/one of the gain and the two pressures is wrong/);
+  });
+
+  it('leaves them out when they are', () => {
+    expect(renderKill(readKill(input)).join('\n')).not.toContain('BEFORE THIS SHEET IS USED');
+  });
+
   it('says so when the mud is already at the leak off', () => {
     const over = renderKill(readKill({ ...input, leakOffPpg: 12 })).join('\n');
     expect(over).toContain('already at the leak off');
