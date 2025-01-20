@@ -66,6 +66,41 @@ describe('readHydraulics', () => {
     expect(slow.cleaning.transportRatio).toBeLessThan(data.cleaning.transportRatio);
   });
 
+  it('takes true vertical depth off the survey when there is one', () => {
+    expect(data.tvdFeet).toBeLessThan(well.totalDepthFeet);
+    expect(data.survey).toHaveLength(well.survey.length);
+  });
+
+  it('lets the survey win over a tvd typed beside it', () => {
+    const wrong = readHydraulics({ ...well, tvdFeet: 5000 }, check);
+    expect(wrong.tvdFeet).toBe(data.tvdFeet);
+  });
+
+  it('falls back to the typed tvd with no survey on the file', () => {
+    const bare = { ...well };
+    delete bare.survey;
+    expect(readHydraulics(bare, check).tvdFeet).toBe(well.tvdFeet);
+    expect(readHydraulics(bare, check).survey).toBe(null);
+  });
+
+  it('falls back to measured depth with neither', () => {
+    const bare = { ...well };
+    delete bare.survey;
+    delete bare.tvdFeet;
+    expect(readHydraulics(bare, check).tvdFeet).toBe(well.totalDepthFeet);
+  });
+
+  it('reads a higher circulating density on the shorter vertical depth', () => {
+    const bare = { ...well };
+    delete bare.survey;
+    delete bare.tvdFeet;
+    expect(data.window.ecdPpg).toBeGreaterThan(readHydraulics(bare, check).window.ecdPpg);
+  });
+
+  it('finds the worst dogleg on the survey', () => {
+    expect(data.worstDogleg.severityPer100).toBeGreaterThan(0);
+  });
+
   it('refuses a check with no dial readings', () => {
     expect(() => readHydraulics(well, { ...check, dials: null })).toThrow(
       /need a full set of dial readings/
@@ -80,6 +115,11 @@ describe('renderHydraulics', () => {
     for (const block of ['PRESSURE', 'ANNULAR VELOCITY', 'DENSITY WINDOW', 'HOLE CLEANING']) {
       expect(text).toContain(block);
     }
+  });
+
+  it('prints both depths, so nobody works a hydrostatic off the wrong one', () => {
+    expect(text).toMatch(/measured depth\s+10450 ft/);
+    expect(text).toMatch(/true vertical depth\s+\d+/);
   });
 
   it('names the length the hole cleans worst in', () => {

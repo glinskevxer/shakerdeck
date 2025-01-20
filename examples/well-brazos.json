@@ -12,13 +12,32 @@
   "penetrationFeetPerHour": 60,
   "hole": {
     "sections": [
-      { "name": "surface casing", "idInches": 8.681, "bottomFeet": 6000, "cased": true },
-      { "name": "open hole", "idInches": 8.5, "bottomFeet": 10450 }
+      {
+        "name": "surface casing",
+        "idInches": 8.681,
+        "bottomFeet": 6000,
+        "cased": true
+      },
+      {
+        "name": "open hole",
+        "idInches": 8.5,
+        "bottomFeet": 10450
+      }
     ]
   },
   "string": [
-    { "name": "drill collars", "odInches": 6.5, "idInches": 2.8125, "lengthFeet": 600 },
-    { "name": "drill pipe", "odInches": 5, "idInches": 4.276, "lengthFeet": 9850 }
+    {
+      "name": "drill collars",
+      "odInches": 6.5,
+      "idInches": 2.8125,
+      "lengthFeet": 600
+    },
+    {
+      "name": "drill pipe",
+      "odInches": 5,
+      "idInches": 4.276,
+      "lengthFeet": 9850
+    }
   ],
   "pump": {
     "label": "number one",
@@ -27,5 +46,32 @@
     "strokeInches": 12,
     "efficiency": 0.95
   },
-  "strokesPerMinute": 120
+  "strokesPerMinute": 120,
+  "survey": [
+    {
+      "measuredDepthFeet": 1000,
+      "inclinationDegrees": 0,
+      "azimuthDegrees": 0
+    },
+    {
+      "measuredDepthFeet": 3000,
+      "inclinationDegrees": 6,
+      "azimuthDegrees": 132
+    },
+    {
+      "measuredDepthFeet": 6000,
+      "inclinationDegrees": 14,
+      "azimuthDegrees": 134
+    },
+    {
+      "measuredDepthFeet": 8500,
+      "inclinationDegrees": 19,
+      "azimuthDegrees": 135
+    },
+    {
+      "measuredDepthFeet": 10450,
+      "inclinationDegrees": 19,
+      "azimuthDegrees": 135
+    }
+  ]
 }

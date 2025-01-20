@@ -11,6 +11,7 @@ import { holeCleaning } from '../../hydraulics/cuttings.js';
 import { annularModel } from '../../rheology/powerlaw.js';
 import { readDials } from '../../rheology/dial.js';
 import { readCheck } from '../../mudcheck/record.js';
+import { runSurvey, tvdAt, worstDogleg } from '../../well/survey.js';
 import { heading, rule } from '../../util/text.js';
 import { definitionList, table } from '../../util/table.js';
 import { round } from '../../util/number.js';
@@ -28,6 +29,13 @@ export function readHydraulics(well, check) {
   const perStroke = pumpOutput(well.pump);
   const flowGpm = well.flowGpm;
   const weightPpg = well.weightPpg ?? read.weightPpg;
+  // True vertical depth decides every hydrostatic on the page. A survey on the
+  // well file wins over a tvd typed beside it, because the survey is the thing
+  // that gets updated and the typed figure is the thing that goes stale.
+  const survey = well.survey ? runSurvey(well.survey) : null;
+  const tvdFeet = survey
+    ? tvdAt(survey, well.totalDepthFeet)
+    : (well.tvdFeet ?? well.totalDepthFeet);
   const system = systemPressure({
     flowGpm,
     densityPpg: weightPpg,
@@ -55,7 +63,7 @@ export function readHydraulics(well, check) {
   const window = densityWindow({
     weightPpg,
     annularLossPsi: system.annulusPsi,
-    tvdFeet: well.tvdFeet ?? well.totalDepthFeet,
+    tvdFeet,
     porePressurePpg: well.porePressurePpg,
     fractureGradientPpg: well.fractureGradientPpg,
     cuttings: well.penetrationFeetPerHour
@@ -80,6 +88,9 @@ export function readHydraulics(well, check) {
   return {
     well: well.well,
     depthFeet: well.totalDepthFeet,
+    tvdFeet,
+    survey,
+    worstDogleg: survey ? worstDogleg(survey) : null,
     flowGpm,
     pump: describePump(well.pump, well.strokesPerMinute ?? 0),
     volumes: {
@@ -109,9 +120,16 @@ export function renderHydraulics(data) {
     heading(`hydraulics  ${data.well}`),
     rule(70),
     ...definitionList([
-      ['depth', `${data.depthFeet} ft`],
+      ['measured depth', `${data.depthFeet} ft`],
+      ['true vertical depth', `${data.tvdFeet} ft`],
       ['rate', `${data.flowGpm} gpm`],
       ['pump', `${data.pump.label} at ${data.pump.bblPerStroke} bbl/stk`],
+      [
+        'worst dogleg',
+        data.worstDogleg === null
+          ? null
+          : `${data.worstDogleg.severityPer100} deg/100ft at ${data.worstDogleg.measuredDepthFeet} ft`,
+      ],
     ]),
     '',
     heading('pressure'),
