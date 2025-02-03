@@ -7,7 +7,7 @@
  * never measured. Every series here carries the gaps with it.
  */
 import { round } from '../util/number.js';
-import { binghamSummary } from '../rheology/bingham.js';
+import { rheologyOf } from '../mudcheck/derive.js';
 
 /**
  * Where each chartable property is read from on a check.
@@ -20,8 +20,8 @@ export const READERS = {
   sandPercent: (check) => check.sandPercent,
   mbtLbBbl: (check) => check.mbtLbBbl,
   filtrateApiMl: (check) => check.filtrate?.apiMl ?? null,
-  plasticViscosity: (check) => (check.dials ? binghamSummary(check.dials).plasticViscosity : null),
-  yieldPoint: (check) => (check.dials ? binghamSummary(check.dials).yieldPoint : null),
+  plasticViscosity: (check) => rheologyOf(check)?.plasticViscosity ?? null,
+  yieldPoint: (check) => rheologyOf(check)?.yieldPoint ?? null,
   solidsPercent: (check) => check.retort?.solidsPercent ?? null,
 };
 

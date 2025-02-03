@@ -2,11 +2,11 @@
  * The check command: read a mud check and print what it says.
  */
 import { readCheck } from '../../mudcheck/record.js';
-import { binghamSummary, gels } from '../../rheology/bingham.js';
+import { derive } from '../../mudcheck/derive.js';
+import { gels } from '../../rheology/bingham.js';
 import { alkalinitySummary } from '../../mudcheck/alkalinity.js';
 import { chemistrySummary } from '../../mudcheck/titration.js';
 import { claySummary } from '../../mudcheck/clay.js';
-import { solidsSummary } from '../../solids/analysis.js';
 import { describeDensity } from '../../units/density.js';
 import { definitionList, table } from '../../util/table.js';
 import { heading, rule } from '../../util/text.js';
@@ -16,16 +16,7 @@ import { heading, rule } from '../../util/text.js';
  */
 export function readCheckSheet(record) {
   const check = readCheck(record);
-  const water = check.retort ? check.retort.waterPercent / 100 : 1;
-  const solids = check.retort
-    ? solidsSummary({
-        weightPpg: check.weightPpg,
-        solidsPercent: check.retort.solidsPercent,
-        waterPercent: check.retort.waterPercent,
-        oilPercent: check.retort.oilPercent,
-        bentoniteLbBbl: check.mbtLbBbl ?? 0,
-      })
-    : null;
+  const { rheology, solids, waterFraction: water } = derive(check);
   return {
     well: check.well,
     date: check.date,
@@ -36,7 +27,7 @@ export function readCheckSheet(record) {
     funnelSeconds: check.funnelSeconds,
     temperatureF: check.temperatureF,
     ph: check.ph,
-    rheology: check.dials ? binghamSummary(check.dials) : null,
+    rheology,
     gels: check.gels ? gels(check.gels) : null,
     filtrate: check.filtrate,
     alkalinity: alkalinitySummary(check.alkalinity, water),

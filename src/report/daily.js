@@ -10,8 +10,7 @@ import { round } from '../util/number.js';
 import { heading, rule, listPhrase } from '../util/text.js';
 import { definitionList, table } from '../util/table.js';
 import { readCheck } from '../mudcheck/record.js';
-import { binghamSummary } from '../rheology/bingham.js';
-import { solidsSummary } from '../solids/analysis.js';
+import { derive, judgeableReadings } from '../mudcheck/derive.js';
 import { checkAgainstWindow, sectionAt } from '../program/window.js';
 
 const PAGE_WIDTH = 74;
@@ -32,35 +31,12 @@ export function buildDaily({
   circulation = null,
 }) {
   const read = readCheck(check, 'check');
-  const rheology = read.dials ? binghamSummary(read.dials) : null;
-  const solids = read.retort
-    ? solidsSummary({
-        weightPpg: read.weightPpg,
-        solidsPercent: read.retort.solidsPercent,
-        waterPercent: read.retort.waterPercent,
-        oilPercent: read.retort.oilPercent,
-        bentoniteLbBbl: read.mbtLbBbl ?? 0,
-      })
-    : null;
+  const { rheology, solids } = derive(read);
   let compliance = null;
   if (programme) {
     const section = sectionAt(programme, read.depthFeet);
     compliance = section
-      ? checkAgainstWindow(
-          {
-            weightPpg: read.weightPpg,
-            funnelSeconds: read.funnelSeconds,
-            plasticViscosity: rheology?.plasticViscosity ?? null,
-            yieldPoint: rheology?.yieldPoint ?? null,
-            filtrateApiMl: read.filtrate?.apiMl ?? null,
-            ph: read.ph,
-            chlorideMgL: read.chlorideMgL,
-            solidsPercent: read.retort?.solidsPercent ?? null,
-            mbtLbBbl: read.mbtLbBbl,
-            sandPercent: read.sandPercent,
-          },
-          section
-        )
+      ? checkAgainstWindow(judgeableReadings(read), section)
       : { section: null, exceptions: [], inWindow: true };
   }
   return {

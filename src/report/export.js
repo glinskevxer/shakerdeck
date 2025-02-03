@@ -8,8 +8,7 @@
  * line writes.
  */
 import { writeCsv } from '../util/csv.js';
-import { binghamSummary } from '../rheology/bingham.js';
-import { solidsSummary } from '../solids/analysis.js';
+import { derive } from '../mudcheck/derive.js';
 
 /**
  * One row per mud check, with everything worked out.
@@ -36,16 +35,7 @@ export const CHECK_COLUMNS = [
  * Flatten a check into the row the columns expect.
  */
 export function checkRow(check) {
-  const rheology = check.dials ? binghamSummary(check.dials) : null;
-  const solids = check.retort
-    ? solidsSummary({
-        weightPpg: check.weightPpg,
-        solidsPercent: check.retort.solidsPercent,
-        waterPercent: check.retort.waterPercent,
-        oilPercent: check.retort.oilPercent,
-        bentoniteLbBbl: check.mbtLbBbl ?? 0,
-      })
-    : null;
+  const { rheology, solids } = derive(check);
   return {
     date: check.date,
     well: check.well,

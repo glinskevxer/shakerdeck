@@ -9,25 +9,13 @@
  */
 import { round } from '../util/number.js';
 import { checkAgainstWindow, sectionAt, WINDOW_PROPERTIES } from '../program/window.js';
-import { binghamSummary } from '../rheology/bingham.js';
+import { judgeableReadings } from '../mudcheck/derive.js';
 
 /**
  * Pull the readings a window can judge off one check.
  */
 export function judgeable(check) {
-  const rheology = check.dials ? binghamSummary(check.dials) : null;
-  return {
-    weightPpg: check.weightPpg,
-    funnelSeconds: check.funnelSeconds,
-    plasticViscosity: rheology?.plasticViscosity ?? null,
-    yieldPoint: rheology?.yieldPoint ?? null,
-    filtrateApiMl: check.filtrate?.apiMl ?? null,
-    ph: check.ph,
-    chlorideMgL: check.chlorideMgL,
-    solidsPercent: check.retort?.solidsPercent ?? null,
-    mbtLbBbl: check.mbtLbBbl,
-    sandPercent: check.sandPercent,
-  };
+  return judgeableReadings(check);
 }
 
 /**
