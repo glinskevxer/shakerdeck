@@ -1,6 +1,11 @@
 import { describe, it, expect } from 'vitest';
 import {
   GALLONS_PER_BARREL,
+  CUBIC_FEET_PER_BARREL,
+  LITRES_PER_BARREL,
+  CUBIC_METRES_PER_BARREL,
+  FEET_PER_METRE,
+  POUNDS_PER_KILOGRAM,
   bblToGal,
   galToBbl,
   bblToCubicFeet,
@@ -30,6 +35,14 @@ describe('barrels and gallons', () => {
     expect(GALLONS_PER_BARREL).toBe(42);
     expect(bblToGal(1)).toBe(42);
     expect(galToBbl(84)).toBe(2);
+  });
+
+  it('carries the conversion constants a barrel is defined by', () => {
+    expect(CUBIC_FEET_PER_BARREL).toBeCloseTo(5.614583, 6);
+    expect(LITRES_PER_BARREL).toBeCloseTo(158.987295, 6);
+    expect(CUBIC_METRES_PER_BARREL).toBeCloseTo(LITRES_PER_BARREL / 1000, 9);
+    expect(FEET_PER_METRE).toBeCloseTo(3.280839895, 9);
+    expect(POUNDS_PER_KILOGRAM).toBeCloseTo(2.20462262, 8);
   });
 
   it('converts a pit volume', () => {

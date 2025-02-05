@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   DISCHARGE_COEFFICIENT,
+  BIT_LOSS_CONSTANT,
   totalFlowArea,
   bitPressureDrop,
   nozzleVelocity,
@@ -37,6 +38,7 @@ describe('totalFlowArea', () => {
 describe('bitPressureDrop', () => {
   it('uses the discharge coefficient of a drilled nozzle', () => {
     expect(DISCHARGE_COEFFICIENT).toBe(0.95);
+    expect(BIT_LOSS_CONSTANT).toBe(8.311e-5);
   });
 
   it('reads a working bit', () => {

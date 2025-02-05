@@ -3,6 +3,7 @@ import {
   BARITE_SG,
   LOW_GRAVITY_SG,
   POUNDS_PER_BARREL_WATER,
+  BASE_OIL_SG,
   solidWeight,
   averageSolidsSg,
   soliditySplit,
@@ -19,6 +20,7 @@ describe('solidWeight', () => {
     expect(POUNDS_PER_BARREL_WATER).toBe(350);
     expect(BARITE_SG).toBe(4.2);
     expect(LOW_GRAVITY_SG).toBe(2.6);
+    expect(BASE_OIL_SG).toBe(0.84);
   });
 
   it('weighs a volume percent of barite', () => {

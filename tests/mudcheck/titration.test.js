@@ -3,6 +3,7 @@ import {
   CHLORIDE_EQUIVALENT,
   HARDNESS_FACTOR,
   SALT_PER_CHLORIDE,
+  MG_PER_LITRE_TO_LB_PER_BBL,
   chloride,
   saltFromChloride,
   saltPercent,
@@ -20,6 +21,7 @@ describe('chloride', () => {
     expect(CHLORIDE_EQUIVALENT).toBe(35450);
     expect(HARDNESS_FACTOR).toBe(400);
     expect(SALT_PER_CHLORIDE).toBe(1.65);
+    expect(MG_PER_LITRE_TO_LB_PER_BBL).toBe(0.00035);
   });
 
   it('reads a fresh mud on the weak silver nitrate', () => {

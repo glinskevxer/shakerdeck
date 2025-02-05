@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   SHEAR_RATE_PER_RPM,
   STRESS_PER_DIAL,
+  DYNE_PER_DIAL,
   STANDARD_SPEEDS,
   shearRate,
   shearStress,
@@ -20,6 +21,7 @@ describe('instrument constants', () => {
   it('are the fann 35 r1 b1 f1 values', () => {
     expect(SHEAR_RATE_PER_RPM).toBe(1.7023);
     expect(STRESS_PER_DIAL).toBe(1.0678);
+    expect(DYNE_PER_DIAL).toBe(5.11);
     expect(STANDARD_SPEEDS).toEqual([600, 300, 200, 100, 6, 3]);
   });
 });

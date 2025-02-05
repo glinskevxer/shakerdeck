@@ -3,6 +3,7 @@ import {
   WATER_PPG,
   PCF_PER_PPG,
   GRADIENT_PER_PPG,
+  GRADIENT_PER_PPG_EXACT,
   ppgToSg,
   sgToPpg,
   ppgToPcf,
@@ -21,6 +22,8 @@ describe('density constants', () => {
     expect(WATER_PPG).toBeCloseTo(8.3454, 4);
     expect(PCF_PER_PPG).toBeCloseTo(7.480519, 6);
     expect(GRADIENT_PER_PPG).toBe(0.052);
+    expect(GRADIENT_PER_PPG_EXACT).toBeCloseTo(0.0519481, 7);
+    expect(GRADIENT_PER_PPG).toBeGreaterThan(GRADIENT_PER_PPG_EXACT);
   });
 });
 

@@ -2,6 +2,9 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import {
   CHECK_COLUMNS,
+  DAY_COLUMNS,
+  STOCK_COLUMNS,
+  ANNULUS_COLUMNS,
   checkRow,
   exportChecks,
   exportDays,
@@ -112,6 +115,13 @@ describe('EXPORTS', () => {
       expect(Array.isArray(entry.columns)).toBe(true);
       expect(typeof entry.write).toBe('function');
     }
+  });
+
+  it('is built from the four column sets', () => {
+    expect(EXPORTS.checks.columns).toBe(CHECK_COLUMNS);
+    expect(EXPORTS.days.columns).toBe(DAY_COLUMNS);
+    expect(EXPORTS.stock.columns).toBe(STOCK_COLUMNS);
+    expect(EXPORTS.annulus.columns).toBe(ANNULUS_COLUMNS);
   });
 
   it('gives every column a heading with no spaces in it', () => {

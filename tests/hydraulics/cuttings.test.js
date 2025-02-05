@@ -3,6 +3,7 @@ import {
   CUTTINGS_SG,
   CUTTINGS_PPG,
   MOORE_LAMINAR,
+  MOORE_INTERMEDIATE,
   MOORE_TURBULENT,
   annularApparentViscosity,
   slipVelocity,
@@ -22,6 +23,7 @@ describe('constants', () => {
 
   it('carries the laminar constant with the hundred already in it', () => {
     expect(MOORE_LAMINAR).toBe(8287);
+    expect(MOORE_INTERMEDIATE).toBe(174);
     expect(MOORE_TURBULENT).toBe(113.4);
   });
 });
