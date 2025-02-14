@@ -135,6 +135,18 @@ node bin/shakerdeck.js pits -p examples/pits-brazos.json
 Only the tanks that are lined up count towards the total, so a transfer into
 the reserve does not read as a gain.
 
+### trip
+
+Runs a trip sheet stand by stand against what the hole should take.
+
+```
+node bin/shakerdeck.js trip -t examples/trip-brazos.json
+```
+
+The running total is the one to read. A stand that is a fifth of a barrel out
+is a reading error; twelve stands each a fifth out is the well telling you
+something.
+
 ### kill
 
 Works the mud side of a kill sheet: the weight, the circulating pressures, the

@@ -21,6 +21,7 @@ import { recapCommand } from './commands/recap.js';
 import { exportCommand } from './commands/export.js';
 import { pitsCommand } from './commands/pits.js';
 import { killCommand } from './commands/kill.js';
+import { tripCommand } from './commands/trip.js';
 
 function output(result, options) {
   const text = render(result, options);
@@ -267,6 +268,21 @@ export function buildProgram({ print = console.log } = {}) {
       }
       input.agent = options.agent;
       print(output(killCommand(input), options));
+    });
+
+  program
+    .command('trip')
+    .description('run a trip sheet stand by stand against what the hole should take')
+    .requiredOption('-t, --trip <file>', 'the trip sheet as json')
+    .option('--threshold <bbl>', 'the running difference worth flagging')
+    .option('-f, --format <format>', 'text or json', 'text')
+    .option('-o, --out <file>', 'write to a file instead of the screen')
+    .action((options) => {
+      const input = readJson(options.trip);
+      if (options.threshold !== undefined) {
+        input.thresholdBbl = Number(options.threshold);
+      }
+      print(output(tripCommand(input), options));
     });
 
   return program;

@@ -1,0 +1,131 @@
+{
+  "well": "brazos 14-3",
+  "direction": "out",
+  "standFeet": 93,
+  "displacementBblPerFoot": 0.00652,
+  "capacityBblPerFoot": 0.01776,
+  "wet": true,
+  "thresholdBbl": 5,
+  "readings": [
+    {
+      "depthFeet": 10450,
+      "movedBbl": 2.26
+    },
+    {
+      "depthFeet": 10357,
+      "movedBbl": 2.24
+    },
+    {
+      "depthFeet": 10264,
+      "movedBbl": 2.21
+    },
+    {
+      "depthFeet": 10171,
+      "movedBbl": 2.18
+    },
+    {
+      "depthFeet": 10078,
+      "movedBbl": 2.12
+    },
+    {
+      "depthFeet": 9985,
+      "movedBbl": 2.06
+    },
+    {
+      "depthFeet": 9892,
+      "movedBbl": 2.01
+    },
+    {
+      "depthFeet": 9799,
+      "movedBbl": 1.98
+    },
+    {
+      "depthFeet": 9706,
+      "movedBbl": 1.95
+    },
+    {
+      "depthFeet": 9613,
+      "movedBbl": 1.92
+    },
+    {
+      "depthFeet": 9520,
+      "movedBbl": 1.9
+    },
+    {
+      "depthFeet": 9427,
+      "movedBbl": 1.88
+    },
+    {
+      "depthFeet": 9334,
+      "movedBbl": 1.87
+    },
+    {
+      "depthFeet": 9241,
+      "movedBbl": 1.86
+    },
+    {
+      "depthFeet": 9148,
+      "movedBbl": 1.85
+    },
+    {
+      "depthFeet": 9055,
+      "movedBbl": 1.84
+    },
+    {
+      "depthFeet": 8962,
+      "movedBbl": 1.83
+    },
+    {
+      "depthFeet": 8869,
+      "movedBbl": 1.82
+    },
+    {
+      "depthFeet": 8776,
+      "movedBbl": 1.81
+    },
+    {
+      "depthFeet": 8683,
+      "movedBbl": 1.8
+    },
+    {
+      "depthFeet": 8590,
+      "movedBbl": 1.79
+    },
+    {
+      "depthFeet": 8497,
+      "movedBbl": 1.78
+    },
+    {
+      "depthFeet": 8404,
+      "movedBbl": 1.77
+    },
+    {
+      "depthFeet": 8311,
+      "movedBbl": 1.76
+    },
+    {
+      "depthFeet": 8218,
+      "movedBbl": 1.75
+    },
+    {
+      "depthFeet": 8125,
+      "movedBbl": 1.74
+    },
+    {
+      "depthFeet": 8032,
+      "movedBbl": 1.73
+    },
+    {
+      "depthFeet": 7939,
+      "movedBbl": 1.72
+    },
+    {
+      "depthFeet": 7846,
+      "movedBbl": 1.72
+    },
+    {
+      "depthFeet": 7753,
+      "movedBbl": 1.72
+    }
+  ]
+}
