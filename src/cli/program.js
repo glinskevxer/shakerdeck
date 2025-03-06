@@ -22,6 +22,7 @@ import { exportCommand } from './commands/export.js';
 import { pitsCommand } from './commands/pits.js';
 import { killCommand } from './commands/kill.js';
 import { tripCommand } from './commands/trip.js';
+import { doctorCommand } from './commands/doctor.js';
 
 function output(result, options) {
   const text = render(result, options);
@@ -283,6 +284,33 @@ export function buildProgram({ print = console.log } = {}) {
         input.thresholdBbl = Number(options.threshold);
       }
       print(output(tripCommand(input), options));
+    });
+
+  program
+    .command('doctor')
+    .description('read the whole set of files together and report where they disagree')
+    .option('-w, --well <file>', 'the well as json')
+    .option('-c, --checks <file>', 'the run of mud checks as json')
+    .option('-p, --programme <file>', 'the mud programme as json')
+    .option('-P, --products <file>', 'the price list as json')
+    .option('-m, --movements <file>', 'the product movements as json')
+    .option('-d, --days <file>', 'the daily records as json')
+    .option('-f, --format <format>', 'text or json', 'text')
+    .option('-o, --out <file>', 'write to a file instead of the screen')
+    .action((options) => {
+      print(
+        output(
+          doctorCommand({
+            well: options.well ? readJson(options.well) : null,
+            checks: options.checks ? readJson(options.checks) : null,
+            programme: options.programme ? readJson(options.programme) : null,
+            products: options.products ? readJson(options.products) : null,
+            movements: options.movements ? readJson(options.movements) : null,
+            days: options.days ? readJson(options.days) : null,
+          }),
+          options
+        )
+      );
     });
 
   return program;

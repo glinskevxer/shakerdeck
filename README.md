@@ -167,6 +167,16 @@ node bin/shakerdeck.js export -t days -i examples/days-brazos.json -P examples/p
 node bin/shakerdeck.js export -t stock -i examples/movements.json -P examples/products.json -b examples/opening-stock.json
 ```
 
+### doctor
+
+Reads the whole set of files together and reports where they disagree with
+each other. Every other command trusts the file it was given; this one looks
+for the contradictions between them.
+
+```
+node bin/shakerdeck.js doctor -w examples/well-brazos.json -c examples/checks-brazos.json -p examples/programme-brazos.json -P examples/products.json -m examples/movements.json -d examples/days-brazos.json
+```
+
 ### commands
 
 ```
