@@ -24,6 +24,46 @@ import { killCommand } from './commands/kill.js';
 import { tripCommand } from './commands/trip.js';
 import { doctorCommand } from './commands/doctor.js';
 
+/**
+ * The commands that print a report, and so take the format and the out file.
+ *
+ * mix takes its inputs as flags rather than a file and export writes one
+ * format only, so neither of them has anything to switch between.
+ */
+export const REPORTING_COMMANDS = [
+  'check',
+  'hydraulics',
+  'daily',
+  'programme',
+  'solids',
+  'stock',
+  'recap',
+  'pits',
+  'kill',
+  'trip',
+  'doctor',
+];
+
+/**
+ * Add the two options every reporting command carries.
+ *
+ * Each command used to carry its own copy of these two lines and they had
+ * already drifted: the wording of the format option was not the same in every
+ * one of them, so the help read differently depending on which command was
+ * asked.
+ */
+function addReportingOptions(program) {
+  for (const command of program.commands) {
+    if (!REPORTING_COMMANDS.includes(command.name())) {
+      continue;
+    }
+    command
+      .option('-f, --format <format>', 'text or json', 'text')
+      .option('-o, --out <file>', 'write to a file instead of the screen');
+  }
+  return program;
+}
+
 function output(result, options) {
   const text = render(result, options);
   if (options.out) {
@@ -49,8 +89,6 @@ export function buildProgram({ print = console.log } = {}) {
     .command('check')
     .description('read a mud check sheet and print what it says')
     .requiredOption('-c, --check <file>', 'the mud check as json')
-    .option('-f, --format <format>', 'text or json', 'text')
-    .option('-o, --out <file>', 'write to a file instead of the screen')
     .action((options) => {
       const result = checkCommand(readJson(options.check));
       print(output(result, options));
@@ -62,8 +100,6 @@ export function buildProgram({ print = console.log } = {}) {
     .requiredOption('-w, --well <file>', 'the well as json')
     .requiredOption('-c, --check <file>', 'the mud check as json')
     .option('-r, --rate <gpm>', 'override the rate on the well file')
-    .option('-f, --format <format>', 'text or json', 'text')
-    .option('-o, --out <file>', 'write to a file instead of the screen')
     .action((options) => {
       const well = readJson(options.well);
       if (options.rate !== undefined) {
@@ -80,8 +116,6 @@ export function buildProgram({ print = console.log } = {}) {
     .requiredOption('-c, --check <file>', 'the mud check as json')
     .option('-p, --programme <file>', 'the mud programme as json')
     .option('-P, --products <file>', 'the price list as json')
-    .option('-f, --format <format>', 'text or json', 'text')
-    .option('-o, --out <file>', 'write to a file instead of the screen')
     .option('--summary', 'print the one line summary instead of the page')
     .action((options) => {
       const result = dailyCommand({
@@ -136,8 +170,6 @@ export function buildProgram({ print = console.log } = {}) {
     .option('-t, --treatments <file>', 'treatment rates per barrel, for a plan')
     .option('-P, --products <file>', 'the price list, for a plan')
     .option('--system <bbl>', 'the surface system volume, for a plan', '500')
-    .option('-f, --format <format>', 'text or json', 'text')
-    .option('-o, --out <file>', 'write to a file instead of the screen')
     .action((options) => {
       const result = programmeCommand({
         programme: readJson(options.programme),
@@ -158,8 +190,6 @@ export function buildProgram({ print = console.log } = {}) {
     .command('solids')
     .description('run the solids control spread over a day of cuttings')
     .requiredOption('-s, --spread <file>', 'the solids control spread as json')
-    .option('-f, --format <format>', 'text or json', 'text')
-    .option('-o, --out <file>', 'write to a file instead of the screen')
     .action((options) => {
       print(output(solidsCommand(readJson(options.spread)), options));
     });
@@ -172,8 +202,6 @@ export function buildProgram({ print = console.log } = {}) {
     .option('-b, --opening <file>', 'the opening stock as json')
     .option('--lead <days>', 'lead time from the yard in days', '3')
     .option('--cover <days>', 'days of cover to order up to', '14')
-    .option('-f, --format <format>', 'text or json', 'text')
-    .option('-o, --out <file>', 'write to a file instead of the screen')
     .action((options) => {
       const result = stockCommand({
         products: readJson(options.products),
@@ -202,8 +230,6 @@ export function buildProgram({ print = console.log } = {}) {
     .option('-p, --programme <file>', 'the mud programme as json')
     .option('-d, --days <file>', 'the daily records as json')
     .option('-P, --products <file>', 'the price list as json')
-    .option('-f, --format <format>', 'text or json', 'text')
-    .option('-o, --out <file>', 'write to a file instead of the screen')
     .action((options) => {
       const checks = readJson(options.checks);
       const result = recapCommand({
@@ -244,8 +270,6 @@ export function buildProgram({ print = console.log } = {}) {
     .description('total the active system over a tour and read the changes')
     .requiredOption('-p, --pits <file>', 'the tanks and the level readings as json')
     .option('--threshold <bbl>', 'the change worth flagging')
-    .option('-f, --format <format>', 'text or json', 'text')
-    .option('-o, --out <file>', 'write to a file instead of the screen')
     .action((options) => {
       const input = readJson(options.pits);
       if (options.threshold !== undefined) {
@@ -260,8 +284,6 @@ export function buildProgram({ print = console.log } = {}) {
     .requiredOption('-k, --kill <file>', 'the shut in readings as json')
     .option('--system <bbl>', 'the system volume, to work the barite out')
     .option('-a, --agent <agent>', 'the weighting agent', 'barite')
-    .option('-f, --format <format>', 'text or json', 'text')
-    .option('-o, --out <file>', 'write to a file instead of the screen')
     .action((options) => {
       const input = readJson(options.kill);
       if (options.system !== undefined) {
@@ -276,8 +298,6 @@ export function buildProgram({ print = console.log } = {}) {
     .description('run a trip sheet stand by stand against what the hole should take')
     .requiredOption('-t, --trip <file>', 'the trip sheet as json')
     .option('--threshold <bbl>', 'the running difference worth flagging')
-    .option('-f, --format <format>', 'text or json', 'text')
-    .option('-o, --out <file>', 'write to a file instead of the screen')
     .action((options) => {
       const input = readJson(options.trip);
       if (options.threshold !== undefined) {
@@ -295,8 +315,6 @@ export function buildProgram({ print = console.log } = {}) {
     .option('-P, --products <file>', 'the price list as json')
     .option('-m, --movements <file>', 'the product movements as json')
     .option('-d, --days <file>', 'the daily records as json')
-    .option('-f, --format <format>', 'text or json', 'text')
-    .option('-o, --out <file>', 'write to a file instead of the screen')
     .action((options) => {
       print(
         output(
@@ -313,7 +331,7 @@ export function buildProgram({ print = console.log } = {}) {
       );
     });
 
-  return program;
+  return addReportingOptions(program);
 }
 
 /**

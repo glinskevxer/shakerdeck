@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { buildProgram, run } from '../../src/cli/program.js';
+import { buildProgram, run, REPORTING_COMMANDS } from '../../src/cli/program.js';
 import { listCommands, renderCommands, commandsCommand } from '../../src/cli/commands/commands.js';
 
 function capture() {
@@ -55,12 +55,31 @@ describe('every command describes itself', () => {
   });
 
   it('offers a format option wherever it prints a report', () => {
-    // mix takes its inputs as flags rather than a file, and export writes one
-    // format only, so neither of them has anything to switch between.
-    const reporting = rows.filter((row) => row.command !== 'mix' && row.command !== 'export');
-    for (const row of reporting) {
-      expect(row.options.map((option) => option.flags).join(' ')).toContain('--format');
+    for (const row of rows.filter((row) => REPORTING_COMMANDS.includes(row.command))) {
+      expect(`${row.command}: ${row.options.map((option) => option.flags).join(' ')}`).toContain(
+        '--format'
+      );
     }
+  });
+
+  it('offers an out file wherever it prints a report', () => {
+    for (const row of rows.filter((row) => REPORTING_COMMANDS.includes(row.command))) {
+      expect(`${row.command}: ${row.options.map((option) => option.flags).join(' ')}`).toContain(
+        '--out'
+      );
+    }
+  });
+
+  it('words the format option the same way everywhere', () => {
+    const wordings = new Set();
+    for (const row of rows) {
+      for (const option of row.options) {
+        if (option.flags.includes('--format')) {
+          wordings.add(`${option.flags}|${option.description}`);
+        }
+      }
+    }
+    expect(wordings.size).toBe(1);
   });
 });
 
