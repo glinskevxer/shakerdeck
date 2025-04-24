@@ -23,6 +23,7 @@ import { pitsCommand } from './commands/pits.js';
 import { killCommand } from './commands/kill.js';
 import { tripCommand } from './commands/trip.js';
 import { doctorCommand } from './commands/doctor.js';
+import { morningCommand } from './commands/morning.js';
 
 /**
  * The commands that print a report, and so take the format and the out file.
@@ -42,6 +43,7 @@ export const REPORTING_COMMANDS = [
   'kill',
   'trip',
   'doctor',
+  'morning',
 ];
 
 /**
@@ -329,6 +331,28 @@ export function buildProgram({ print = console.log } = {}) {
           options
         )
       );
+    });
+
+  program
+    .command('morning')
+    .description('write the four line morning report off the last two checks')
+    .requiredOption('-c, --checks <file>', 'the run of mud checks as json')
+    .option('-w, --well <name>', 'the well name')
+    .option('-p, --programme <file>', 'the mud programme as json')
+    .option('-a, --activity <text>', 'one line on what the rig is doing')
+    .option('--subject', 'print the subject line instead of the report')
+    .action((options) => {
+      const result = morningCommand({
+        well: options.well,
+        checks: readJson(options.checks),
+        programme: options.programme ? readJson(options.programme) : null,
+        activity: options.activity ?? null,
+      });
+      if (options.subject) {
+        print(result.subject);
+        return;
+      }
+      print(output(result, options));
     });
 
   return addReportingOptions(program);

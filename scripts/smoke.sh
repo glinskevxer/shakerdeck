@@ -42,6 +42,8 @@ run export -t checks -i examples/checks-brazos.json
 run export -t days -i examples/days-brazos.json -P examples/products.json
 run export -t stock -i examples/movements.json -P examples/products.json -b examples/opening-stock.json
 run doctor -w examples/well-brazos.json -c examples/checks-brazos.json -p examples/programme-brazos.json -P examples/products.json -m examples/movements.json -d examples/days-brazos.json
+run morning -c examples/checks-brazos.json -p examples/programme-brazos.json
+run morning -c examples/checks-brazos.json --subject
 run commands
 run commands -v
 

@@ -167,6 +167,15 @@ node bin/shakerdeck.js export -t days -i examples/days-brazos.json -P examples/p
 node bin/shakerdeck.js export -t stock -i examples/movements.json -P examples/products.json -b examples/opening-stock.json
 ```
 
+### morning
+
+Writes the four line report that goes out by email at six.
+
+```
+node bin/shakerdeck.js morning -c examples/checks-brazos.json -p examples/programme-brazos.json
+node bin/shakerdeck.js morning -c examples/checks-brazos.json --subject
+```
+
 ### doctor
 
 Reads the whole set of files together and reports where they disagree with
