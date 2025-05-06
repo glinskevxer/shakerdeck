@@ -167,6 +167,14 @@ node bin/shakerdeck.js export -t days -i examples/days-brazos.json -P examples/p
 node bin/shakerdeck.js export -t stock -i examples/movements.json -P examples/products.json -b examples/opening-stock.json
 ```
 
+### section
+
+Reports what one hole section actually took, against the plan it was drilled to.
+
+```
+node bin/shakerdeck.js section -s intermediate -c examples/checks-brazos.json -p examples/programme-brazos.json -d examples/days-brazos.json -P examples/products.json -t examples/treatments.json
+```
+
 ### morning
 
 Writes the four line report that goes out by email at six.
