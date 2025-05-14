@@ -47,6 +47,13 @@ export function effectiveViscosity(dial, rpm) {
  * a negative plastic viscosity three functions later, so it is caught here.
  */
 export function readDials(readings) {
+  // A set that has already been read comes back as a Map, and reading it a
+  // second time used to produce an empty set rather than the same one, because
+  // Object.entries of a Map is empty. Anything that read a check twice, which
+  // the reports do, quietly lost the rheology.
+  if (readings instanceof Map) {
+    return readings;
+  }
   if (!readings || typeof readings !== 'object') {
     throw new Error('dial readings must be given as an object keyed by speed');
   }

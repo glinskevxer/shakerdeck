@@ -128,6 +128,20 @@ describe('readCheck', () => {
   });
 });
 
+describe('reading a check twice', () => {
+  it('gives the same check back', () => {
+    const once = readCheck(full);
+    const twice = readCheck(once);
+    expect(twice.weightPpg).toBe(once.weightPpg);
+    expect(twice.dials.get(600)).toBe(64);
+    expect(twice.retort).toEqual(once.retort);
+  });
+
+  it('does not lose the rheology on the second pass', () => {
+    expect(readCheck(readCheck(full)).dials.size).toBe(6);
+  });
+});
+
 describe('readChecks', () => {
   it('sorts oldest first', () => {
     const rows = readChecks([

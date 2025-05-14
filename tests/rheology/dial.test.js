@@ -74,6 +74,12 @@ describe('readDials', () => {
     expect(() => readDials({ 6: 5, 3: 5 })).not.toThrow();
   });
 
+  it('hands a set that has already been read straight back', () => {
+    const once = readDials(check);
+    expect(readDials(once)).toBe(once);
+    expect(readDials(once).get(600)).toBe(64);
+  });
+
   it('refuses an empty or malformed set', () => {
     expect(() => readDials({})).toThrow(/no dial readings/);
     expect(() => readDials(null)).toThrow(/keyed by speed/);
