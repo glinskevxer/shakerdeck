@@ -88,6 +88,7 @@ describe('every test file', () => {
       'tests/readme.test.js',
       'tests/docs.test.js',
       'tests/consistency.test.js',
+      'tests/coverage-gaps.test.js',
     ]);
     for (const test of testFiles) {
       if (

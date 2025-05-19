@@ -9,11 +9,14 @@ export default defineConfig({
       reporter: ['text-summary', 'lcov', 'json-summary'],
       include: ['src/**/*.js'],
       exclude: ['bin/**', 'src/index.js'],
+      // Raised as the suite grew. They are floors rather than targets: the
+      // point is that a change which drops coverage fails rather than being
+      // noticed six weeks later.
       thresholds: {
-        lines: 98,
-        statements: 98,
-        functions: 97,
-        branches: 92,
+        lines: 99,
+        statements: 99,
+        functions: 99,
+        branches: 92.5,
       },
     },
   },
