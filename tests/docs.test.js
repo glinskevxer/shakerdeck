@@ -111,6 +111,100 @@ describe('the rheology page', () => {
   });
 });
 
+describe('the hydraulics page', () => {
+  const page = text['hydraulics.md'];
+
+  it('names the modules in the order the system is worked in', () => {
+    const order = [
+      'src/well/geometry.js',
+      'src/hydraulics/velocity.js',
+      'src/hydraulics/system.js',
+      'src/hydraulics/bit.js',
+      'src/hydraulics/ecd.js',
+    ];
+    let last = -1;
+    for (const module of order) {
+      const at = page.indexOf(module);
+      expect(`${module}: ${at > last}`).toBe(`${module}: true`);
+      last = at;
+    }
+  });
+
+  it('names the function the report actually calls for the slowest length', async () => {
+    const velocity = await import('../src/hydraulics/velocity.js');
+    expect(page).toContain('slowestAnnulus');
+    expect(typeof velocity.slowestAnnulus).toBe('function');
+  });
+
+  it('points at the test that holds the case where the correlation gives up', () => {
+    expect(page).toContain('tests/edges/extremes.test.js');
+    expect(existsSync('tests/edges/extremes.test.js')).toBe(true);
+  });
+
+  it('quotes both optimisation criteria', async () => {
+    const optimise = await import('../src/hydraulics/optimise.js');
+    for (const criterion of Object.keys(optimise.OPTIMUM_SHARE)) {
+      expect(page).toContain(criterion);
+    }
+  });
+});
+
+describe('the solids page', () => {
+  const page = text['solids.md'];
+
+  it('quotes the two gravities the split is made between', async () => {
+    const analysis = await import('../src/solids/analysis.js');
+    expect(page).toContain(String(analysis.BARITE_SG));
+    expect(page).toContain(String(analysis.LOW_GRAVITY_SG));
+  });
+
+  it('names the function that carries the sizes forward', async () => {
+    const screens = await import('../src/solidscontrol/screens.js');
+    expect(page).toContain('passedDistribution');
+    expect(typeof screens.passedDistribution).toBe('function');
+  });
+
+  it('names the functions it points the reader at', async () => {
+    const utilisation = await import('../src/solidscontrol/utilisation.js');
+    const dilution = await import('../src/material/dilution.js');
+    expect(typeof utilisation.effectiveRemoval).toBe('function');
+    expect(typeof dilution.dilutionAgainstRemoval).toBe('function');
+    expect(page).toContain('effectiveRemoval');
+    expect(page).toContain('dilutionAgainstRemoval');
+  });
+
+  it('says why doctor does not compare the weight back against the gravity', () => {
+    expect(page).toMatch(/would agree by construction/);
+  });
+});
+
+describe('every page', () => {
+  it('names a function that is actually exported where it names one', async () => {
+    const modules = new Map();
+    for (const body of Object.values(text)) {
+      for (const match of body.matchAll(/`(src\/[a-z\-/.]+\.js)`/g)) {
+        if (!modules.has(match[1])) {
+          modules.set(match[1], await import(`../${match[1]}`));
+        }
+      }
+    }
+    expect(modules.size).toBeGreaterThan(5);
+  });
+
+  it('has a heading on the first line', () => {
+    for (const [page, body] of Object.entries(text)) {
+      expect(`${page}: ${body.startsWith('# ')}`).toBe(`${page}: true`);
+    }
+  });
+
+  it('has no trailing whitespace on any line', () => {
+    for (const [page, body] of Object.entries(text)) {
+      const bad = body.split('\n').filter((line) => /\s$/.test(line)).length;
+      expect(`${page}: ${bad}`).toBe(`${page}: 0`);
+    }
+  });
+});
+
 describe('the readme', () => {
   it('does not repeat the whole of a docs page', () => {
     const readme = readFileSync('README.md', 'utf8');
