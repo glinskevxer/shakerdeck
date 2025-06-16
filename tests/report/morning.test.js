@@ -1,11 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { fixtures } from '../support/fixtures.js';
 import { buildMorning, renderMorning, morningSubject } from '../../src/report/morning.js';
 import { readProgramme } from '../../src/program/window.js';
 
-const check = JSON.parse(readFileSync('examples/check-brazos.json', 'utf8'));
-const checks = JSON.parse(readFileSync('examples/checks-brazos.json', 'utf8'));
-const programme = readProgramme(JSON.parse(readFileSync('examples/programme-brazos.json', 'utf8')));
+const check = fixtures.check;
+const checks = fixtures.checks;
+const programme = readProgramme(fixtures.programme);
 
 const morning = buildMorning({
   well: 'brazos 14-3',

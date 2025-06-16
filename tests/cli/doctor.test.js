@@ -1,27 +1,16 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
 import { diagnose, renderDoctor, doctorCommand } from '../../src/cli/commands/doctor.js';
 import { run } from '../../src/cli/program.js';
+import { capture, fixtures } from '../support/fixtures.js';
 
-const well = JSON.parse(readFileSync('examples/well-brazos.json', 'utf8'));
-const checks = JSON.parse(readFileSync('examples/checks-brazos.json', 'utf8'));
-const programme = JSON.parse(readFileSync('examples/programme-brazos.json', 'utf8'));
-const products = JSON.parse(readFileSync('examples/products.json', 'utf8'));
-const movements = JSON.parse(readFileSync('examples/movements.json', 'utf8'));
-const days = JSON.parse(readFileSync('examples/days-brazos.json', 'utf8'));
+const well = fixtures.well;
+const checks = fixtures.checks;
+const programme = fixtures.programme;
+const products = fixtures.products;
+const movements = fixtures.movements;
+const days = fixtures.days;
 
 const everything = { well, checks, programme, products, movements, days };
-
-function capture() {
-  const out = [];
-  const err = [];
-  return {
-    out,
-    err,
-    print: (line) => out.push(String(line)),
-    fail: (line) => err.push(String(line)),
-  };
-}
 
 describe('diagnose', () => {
   it('finds nothing wrong with the example set', () => {

@@ -1,17 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { buildProgram, run, REPORTING_COMMANDS } from '../../src/cli/program.js';
+import { capture } from '../support/fixtures.js';
 import { listCommands, renderCommands, commandsCommand } from '../../src/cli/commands/commands.js';
-
-function capture() {
-  const out = [];
-  const err = [];
-  return {
-    out,
-    err,
-    print: (line) => out.push(String(line)),
-    fail: (line) => err.push(String(line)),
-  };
-}
 
 const rows = listCommands(buildProgram());
 

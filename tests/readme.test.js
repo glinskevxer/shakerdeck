@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { run, buildProgram } from '../src/cli/program.js';
+import { capture } from './support/fixtures.js';
 import { listCommands } from '../src/cli/commands/commands.js';
 
 const readme = readFileSync('README.md', 'utf8');
@@ -20,17 +21,6 @@ function commandLines() {
 function argv(line) {
   const parts = line.replace('node bin/shakerdeck.js ', '').match(/"[^"]*"|\S+/g) ?? [];
   return parts.map((part) => part.replace(/^"|"$/g, ''));
-}
-
-function capture() {
-  const out = [];
-  const err = [];
-  return {
-    out,
-    err,
-    print: (line) => out.push(String(line)),
-    fail: (line) => err.push(String(line)),
-  };
 }
 
 describe('the readme', () => {

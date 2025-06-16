@@ -1,24 +1,13 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
 import { daysInSection, sectionCommand } from '../../src/cli/commands/section.js';
 import { run } from '../../src/cli/program.js';
+import { capture, fixtures } from '../support/fixtures.js';
 
-const checks = JSON.parse(readFileSync('examples/checks-brazos.json', 'utf8'));
-const programme = JSON.parse(readFileSync('examples/programme-brazos.json', 'utf8'));
-const days = JSON.parse(readFileSync('examples/days-brazos.json', 'utf8'));
-const products = JSON.parse(readFileSync('examples/products.json', 'utf8'));
-const treatments = JSON.parse(readFileSync('examples/treatments.json', 'utf8'));
-
-function capture() {
-  const out = [];
-  const err = [];
-  return {
-    out,
-    err,
-    print: (line) => out.push(String(line)),
-    fail: (line) => err.push(String(line)),
-  };
-}
+const checks = fixtures.checks;
+const programme = fixtures.programme;
+const days = fixtures.days;
+const products = fixtures.products;
+const treatments = fixtures.treatments;
 
 describe('daysInSection', () => {
   it('takes only the days between the two dates', () => {

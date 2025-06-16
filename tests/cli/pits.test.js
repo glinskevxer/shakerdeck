@@ -1,20 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
 import { readPits, renderPits, pitsCommand } from '../../src/cli/commands/pits.js';
 import { run } from '../../src/cli/program.js';
+import { capture, fixtures } from '../support/fixtures.js';
 
-const input = JSON.parse(readFileSync('examples/pits-brazos.json', 'utf8'));
-
-function capture() {
-  const out = [];
-  const err = [];
-  return {
-    out,
-    err,
-    print: (line) => out.push(String(line)),
-    fail: (line) => err.push(String(line)),
-  };
-}
+const input = fixtures.pits;
 
 describe('readPits', () => {
   const data = readPits(input);

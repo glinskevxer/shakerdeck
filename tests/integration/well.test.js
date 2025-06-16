@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { fixtures } from '../support/fixtures.js';
 import { readHydraulics } from '../../src/cli/commands/hydraulics.js';
 import { readCheckSheet } from '../../src/cli/commands/check.js';
 import { readDay } from '../../src/cli/commands/daily.js';
@@ -10,14 +10,14 @@ import { circulationTimes, pumpOutput } from '../../src/well/pump.js';
 import { weightUp } from '../../src/material/weightup.js';
 import { readCheck } from '../../src/mudcheck/record.js';
 
-const well = JSON.parse(readFileSync('examples/well-brazos.json', 'utf8'));
-const check = JSON.parse(readFileSync('examples/check-brazos.json', 'utf8'));
-const day = JSON.parse(readFileSync('examples/day-brazos.json', 'utf8'));
-const checks = JSON.parse(readFileSync('examples/checks-brazos.json', 'utf8'));
-const programme = JSON.parse(readFileSync('examples/programme-brazos.json', 'utf8'));
-const products = JSON.parse(readFileSync('examples/products.json', 'utf8'));
-const days = JSON.parse(readFileSync('examples/days-brazos.json', 'utf8'));
-const spread = JSON.parse(readFileSync('examples/solids-control.json', 'utf8'));
+const well = fixtures.well;
+const check = fixtures.check;
+const day = fixtures.day;
+const checks = fixtures.checks;
+const programme = fixtures.programme;
+const products = fixtures.products;
+const days = fixtures.days;
+const spread = fixtures.spread;
 
 describe('one well, end to end', () => {
   it('reads the same weight everywhere it appears', () => {

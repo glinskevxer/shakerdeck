@@ -1,10 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { fixtures } from '../support/fixtures.js';
 import { buildDaily, renderDaily, dailyLine } from '../../src/report/daily.js';
 import { readProgramme } from '../../src/program/window.js';
 
-const check = JSON.parse(readFileSync('examples/check-brazos.json', 'utf8'));
-const programme = readProgramme(JSON.parse(readFileSync('examples/programme-brazos.json', 'utf8')));
+const check = fixtures.check;
+const programme = readProgramme(fixtures.programme);
 
 const full = buildDaily({
   well: 'brazos 14-3',

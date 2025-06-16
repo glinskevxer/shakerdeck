@@ -5,23 +5,13 @@ import { join } from 'node:path';
 import { buildExport, exportCommand } from '../../src/cli/commands/export.js';
 import { readCsv } from '../../src/util/csv.js';
 import { run } from '../../src/cli/program.js';
+import { capture, fixtures } from '../support/fixtures.js';
 
-const checks = JSON.parse(readFileSync('examples/checks-brazos.json', 'utf8'));
-const days = JSON.parse(readFileSync('examples/days-brazos.json', 'utf8'));
-const movements = JSON.parse(readFileSync('examples/movements.json', 'utf8'));
-const products = JSON.parse(readFileSync('examples/products.json', 'utf8'));
-const opening = JSON.parse(readFileSync('examples/opening-stock.json', 'utf8'));
-
-function capture() {
-  const out = [];
-  const err = [];
-  return {
-    out,
-    err,
-    print: (line) => out.push(String(line)),
-    fail: (line) => err.push(String(line)),
-  };
-}
+const checks = fixtures.checks;
+const days = fixtures.days;
+const movements = fixtures.movements;
+const products = fixtures.products;
+const opening = fixtures.opening;
 
 describe('buildExport', () => {
   it('writes the checks', () => {

@@ -1,25 +1,14 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
 import {
   readHydraulics,
   renderHydraulics,
   hydraulicsCommand,
 } from '../../src/cli/commands/hydraulics.js';
 import { run } from '../../src/cli/program.js';
+import { capture, fixtures } from '../support/fixtures.js';
 
-const well = JSON.parse(readFileSync('examples/well-brazos.json', 'utf8'));
-const check = JSON.parse(readFileSync('examples/check-brazos.json', 'utf8'));
-
-function capture() {
-  const out = [];
-  const err = [];
-  return {
-    out,
-    err,
-    print: (line) => out.push(String(line)),
-    fail: (line) => err.push(String(line)),
-  };
-}
+const well = fixtures.well;
+const check = fixtures.check;
 
 describe('readHydraulics', () => {
   const data = readHydraulics(well, check);

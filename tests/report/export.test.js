@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { fixtures } from '../support/fixtures.js';
 import {
   CHECK_COLUMNS,
   DAY_COLUMNS,
@@ -15,8 +15,8 @@ import {
 import { readChecks } from '../../src/mudcheck/record.js';
 import { readCsv } from '../../src/util/csv.js';
 
-const checks = readChecks(JSON.parse(readFileSync('examples/checks-brazos.json', 'utf8')));
-const full = readChecks([JSON.parse(readFileSync('examples/check-brazos.json', 'utf8'))]);
+const checks = readChecks(fixtures.checks);
+const full = readChecks([fixtures.check]);
 
 describe('checkRow', () => {
   it('flattens everything the columns want', () => {

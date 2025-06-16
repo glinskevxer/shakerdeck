@@ -1,5 +1,4 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
 import {
   usageHistory,
   readStock,
@@ -7,21 +6,11 @@ import {
   stockCommand,
 } from '../../src/cli/commands/stock.js';
 import { run } from '../../src/cli/program.js';
+import { capture, fixtures } from '../support/fixtures.js';
 
-const products = JSON.parse(readFileSync('examples/products.json', 'utf8'));
-const movements = JSON.parse(readFileSync('examples/movements.json', 'utf8'));
-const opening = JSON.parse(readFileSync('examples/opening-stock.json', 'utf8'));
-
-function capture() {
-  const out = [];
-  const err = [];
-  return {
-    out,
-    err,
-    print: (line) => out.push(String(line)),
-    fail: (line) => err.push(String(line)),
-  };
-}
+const products = fixtures.products;
+const movements = fixtures.movements;
+const opening = fixtures.opening;
 
 describe('usageHistory', () => {
   const history = usageHistory(movements);

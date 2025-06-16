@@ -1,5 +1,4 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
 import {
   renderProgramme,
   renderCompliance,
@@ -7,23 +6,13 @@ import {
 } from '../../src/cli/commands/programme.js';
 import { readProgramme } from '../../src/program/window.js';
 import { run } from '../../src/cli/program.js';
+import { capture, fixtures } from '../support/fixtures.js';
 
-const raw = JSON.parse(readFileSync('examples/programme-brazos.json', 'utf8'));
+const raw = fixtures.programme;
 const programme = readProgramme(raw);
-const checks = JSON.parse(readFileSync('examples/checks-brazos.json', 'utf8'));
-const treatments = JSON.parse(readFileSync('examples/treatments.json', 'utf8'));
-const products = JSON.parse(readFileSync('examples/products.json', 'utf8'));
-
-function capture() {
-  const out = [];
-  const err = [];
-  return {
-    out,
-    err,
-    print: (line) => out.push(String(line)),
-    fail: (line) => err.push(String(line)),
-  };
-}
+const checks = fixtures.checks;
+const treatments = fixtures.treatments;
+const products = fixtures.products;
 
 describe('renderProgramme', () => {
   const text = renderProgramme(programme).join('\n');

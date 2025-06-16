@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { fixtures } from '../support/fixtures.js';
 import {
   productLines,
   serviceLines,
@@ -8,8 +8,8 @@ import {
   invoiceSplit,
 } from '../../src/cost/invoice.js';
 
-const products = JSON.parse(readFileSync('examples/products.json', 'utf8'));
-const movements = JSON.parse(readFileSync('examples/movements.json', 'utf8'));
+const products = fixtures.products;
+const movements = fixtures.movements;
 const rentals = [
   { code: 'CENT', description: 'decanting centrifuge', ratePerDay: 450 },
   { code: 'MIX', description: 'mixing plant', ratePerDay: 180, days: 4 },

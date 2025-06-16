@@ -1,24 +1,13 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
 import {
   readSolidsControl,
   renderSolidsControl,
   solidsCommand,
 } from '../../src/cli/commands/solids.js';
 import { run } from '../../src/cli/program.js';
+import { capture, fixtures } from '../support/fixtures.js';
 
-const spread = JSON.parse(readFileSync('examples/solids-control.json', 'utf8'));
-
-function capture() {
-  const out = [];
-  const err = [];
-  return {
-    out,
-    err,
-    print: (line) => out.push(String(line)),
-    fail: (line) => err.push(String(line)),
-  };
-}
+const spread = fixtures.spread;
 
 describe('readSolidsControl', () => {
   const data = readSolidsControl(spread);

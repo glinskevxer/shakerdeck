@@ -1,20 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { run } from '../src/cli/program.js';
+import { capture } from './support/fixtures.js';
 
 const pages = readdirSync('docs').filter((file) => file.endsWith('.md'));
 const text = Object.fromEntries(pages.map((file) => [file, readFileSync(`docs/${file}`, 'utf8')]));
-
-function capture() {
-  const out = [];
-  const err = [];
-  return {
-    out,
-    err,
-    print: (line) => out.push(String(line)),
-    fail: (line) => err.push(String(line)),
-  };
-}
 
 describe('the docs', () => {
   it('are there', () => {

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
 import { run } from '../../src/cli/program.js';
+import { capture, fixtures } from '../support/fixtures.js';
 import { readChecks } from '../../src/mudcheck/record.js';
 import { readProgramme } from '../../src/program/window.js';
 import { buildDaily } from '../../src/report/daily.js';
@@ -9,11 +9,11 @@ import { buildSectionReport } from '../../src/report/section.js';
 import { buildMorning } from '../../src/report/morning.js';
 import { dayCost } from '../../src/cost/daily.js';
 
-const check = JSON.parse(readFileSync('examples/check-brazos.json', 'utf8'));
-const rawChecks = JSON.parse(readFileSync('examples/checks-brazos.json', 'utf8'));
-const rawProgramme = JSON.parse(readFileSync('examples/programme-brazos.json', 'utf8'));
-const rawDays = JSON.parse(readFileSync('examples/days-brazos.json', 'utf8'));
-const products = JSON.parse(readFileSync('examples/products.json', 'utf8'));
+const check = fixtures.check;
+const rawChecks = fixtures.checks;
+const rawProgramme = fixtures.programme;
+const rawDays = fixtures.days;
+const products = fixtures.products;
 
 const checks = readChecks(rawChecks);
 const programme = readProgramme(rawProgramme);
@@ -29,17 +29,6 @@ const days = rawDays.map((day) =>
     haulageCharge: day.haulageCharge ?? 0,
   })
 );
-
-function capture() {
-  const out = [];
-  const err = [];
-  return {
-    out,
-    err,
-    print: (line) => out.push(String(line)),
-    fail: (line) => err.push(String(line)),
-  };
-}
 
 describe('every report agrees with every other', () => {
   const daily = buildDaily({ well: 'brazos 14-3', date: '2024-08-19', check, programme });

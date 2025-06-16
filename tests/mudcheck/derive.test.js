@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { fixtures } from '../support/fixtures.js';
 import {
   rheologyOf,
   solidsOf,
@@ -13,7 +13,7 @@ import { buildDaily } from '../../src/report/daily.js';
 import { checkRow } from '../../src/report/export.js';
 import { judgeable } from '../../src/quality/exceptions.js';
 
-const raw = JSON.parse(readFileSync('examples/check-brazos.json', 'utf8'));
+const raw = fixtures.check;
 const check = readCheck(raw);
 const bare = readCheck({ well: 'ward 2', date: '2025-03-06', depthFeet: 4000, weightPpg: 9.4 });
 

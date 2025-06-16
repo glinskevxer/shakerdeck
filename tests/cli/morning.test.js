@@ -1,21 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
 import { readMorning, morningCommand } from '../../src/cli/commands/morning.js';
 import { run } from '../../src/cli/program.js';
+import { capture, fixtures } from '../support/fixtures.js';
 
-const checks = JSON.parse(readFileSync('examples/checks-brazos.json', 'utf8'));
-const programme = JSON.parse(readFileSync('examples/programme-brazos.json', 'utf8'));
-
-function capture() {
-  const out = [];
-  const err = [];
-  return {
-    out,
-    err,
-    print: (line) => out.push(String(line)),
-    fail: (line) => err.push(String(line)),
-  };
-}
+const checks = fixtures.checks;
+const programme = fixtures.programme;
 
 describe('readMorning', () => {
   const data = readMorning({ checks, programme });

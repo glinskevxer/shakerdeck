@@ -1,12 +1,12 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { fixtures } from '../support/fixtures.js';
 import { buildSectionReport, renderSectionReport } from '../../src/report/section.js';
 import { readChecks } from '../../src/mudcheck/record.js';
 import { readProgramme } from '../../src/program/window.js';
 import { dayCost } from '../../src/cost/daily.js';
 
-const checks = readChecks(JSON.parse(readFileSync('examples/checks-brazos.json', 'utf8')));
-const programme = readProgramme(JSON.parse(readFileSync('examples/programme-brazos.json', 'utf8')));
+const checks = readChecks(fixtures.checks);
+const programme = readProgramme(fixtures.programme);
 const section = programme.sections[1];
 
 const products = [{ code: 'BAR', name: 'barite', unit: 'sack', pricePerUnit: 16 }];

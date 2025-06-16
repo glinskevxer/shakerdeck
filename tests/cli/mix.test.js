@@ -1,17 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { readMix, renderMix, mixCommand } from '../../src/cli/commands/mix.js';
 import { run } from '../../src/cli/program.js';
-
-function capture() {
-  const out = [];
-  const err = [];
-  return {
-    out,
-    err,
-    print: (line) => out.push(String(line)),
-    fail: (line) => err.push(String(line)),
-  };
-}
+import { capture } from '../support/fixtures.js';
 
 describe('readMix', () => {
   it('works a weight up out', () => {

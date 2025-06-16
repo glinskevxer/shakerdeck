@@ -95,7 +95,8 @@ describe('every test file', () => {
         standalone.has(test) ||
         test.startsWith('tests/integration') ||
         test.startsWith('tests/property') ||
-        test.startsWith('tests/edges')
+        test.startsWith('tests/edges') ||
+        test.startsWith('tests/support')
       ) {
         continue;
       }
@@ -110,7 +111,7 @@ describe('every test file', () => {
   });
 
   it('actually asserts something', () => {
-    for (const test of testFiles) {
+    for (const test of testFiles.filter((path) => path.endsWith('.test.js'))) {
       expect(`${test}: ${readFileSync(test, 'utf8').includes('expect(')}`).toBe(`${test}: true`);
     }
   });

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { fixtures } from '../support/fixtures.js';
 import {
   complianceScore,
   dilutionRatio,
@@ -10,8 +10,8 @@ import {
 import { readChecks } from '../../src/mudcheck/record.js';
 import { readProgramme } from '../../src/program/window.js';
 
-const checks = readChecks(JSON.parse(readFileSync('examples/checks-brazos.json', 'utf8')));
-const programme = readProgramme(JSON.parse(readFileSync('examples/programme-brazos.json', 'utf8')));
+const checks = readChecks(fixtures.checks);
+const programme = readProgramme(fixtures.programme);
 
 describe('complianceScore', () => {
   it('scores the share of checks inside the window', () => {

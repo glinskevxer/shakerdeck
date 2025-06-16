@@ -1,23 +1,12 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
 import { readDay, dailyCommand } from '../../src/cli/commands/daily.js';
 import { run } from '../../src/cli/program.js';
+import { capture, fixtures } from '../support/fixtures.js';
 
-const day = JSON.parse(readFileSync('examples/day-brazos.json', 'utf8'));
-const check = JSON.parse(readFileSync('examples/check-brazos.json', 'utf8'));
-const programme = JSON.parse(readFileSync('examples/programme-brazos.json', 'utf8'));
-const products = JSON.parse(readFileSync('examples/products.json', 'utf8'));
-
-function capture() {
-  const out = [];
-  const err = [];
-  return {
-    out,
-    err,
-    print: (line) => out.push(String(line)),
-    fail: (line) => err.push(String(line)),
-  };
-}
+const day = fixtures.day;
+const check = fixtures.check;
+const programme = fixtures.programme;
+const products = fixtures.products;
 
 describe('readDay', () => {
   it('values the day off the price list', () => {

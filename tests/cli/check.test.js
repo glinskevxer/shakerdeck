@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
+import { fixtures } from '../support/fixtures.js';
 import { readCheckSheet, renderCheck, checkCommand } from '../../src/cli/commands/check.js';
-import { readFileSync } from 'node:fs';
 
-const record = JSON.parse(readFileSync('examples/check-brazos.json', 'utf8'));
+const record = fixtures.check;
 
 describe('readCheckSheet', () => {
   const data = readCheckSheet(record);

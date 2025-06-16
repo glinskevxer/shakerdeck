@@ -3,19 +3,9 @@ import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { run, buildProgram } from '../../src/cli/program.js';
+import { capture } from '../support/fixtures.js';
 import { readJson, render, writeText, UsageError } from '../../src/cli/io.js';
 import { VERSION } from '../../src/version.js';
-
-function capture() {
-  const out = [];
-  const err = [];
-  return {
-    out,
-    err,
-    print: (line) => out.push(String(line)),
-    fail: (line) => err.push(String(line)),
-  };
-}
 
 describe('readJson', () => {
   it('reads a file', () => {
