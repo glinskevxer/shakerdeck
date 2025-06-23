@@ -30,7 +30,8 @@
     "coverage": "vitest run --coverage",
     "smoke": "bash scripts/smoke.sh",
     "audit": "bash scripts/audit-check.sh",
-    "check": "npm run lint && npm run format:check && npm test && npm run smoke"
+    "check": "npm run lint && npm run format:check && npm test && npm run smoke && npm run release:check",
+    "release:check": "bash scripts/release-check.sh"
   },
   "devDependencies": {
     "@eslint/js": "9.19.0",
