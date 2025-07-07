@@ -4,6 +4,7 @@
  */
 export * as density from './units/density.js';
 export * as measure from './units/measure.js';
+export * as pressure from './units/pressure.js';
 export * as capacity from './well/capacity.js';
 export * as pump from './well/pump.js';
 export * as geometry from './well/geometry.js';
