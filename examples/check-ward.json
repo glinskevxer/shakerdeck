@@ -1,0 +1,20 @@
+{
+  "well": "ward 2",
+  "date": "2025-07-14",
+  "time": "06:00",
+  "depthFeet": 13850,
+  "samplePoint": "flowline",
+  "base": "oil",
+  "weightPpg": 14.5,
+  "funnelSeconds": 62,
+  "temperatureF": 148,
+  "electricalStabilityVolts": 620,
+  "chlorideMgL": 128000,
+  "mbtLbBbl": 9.5,
+  "sandPercent": 0.15,
+  "dials": { "600": 78, "300": 48, "200": 38, "100": 26, "6": 9, "3": 8 },
+  "gels": { "tenSecond": 9, "tenMinute": 13, "thirtyMinute": 15 },
+  "filtrate": { "hthpMl": 4.2, "hthpTemperatureF": 300, "cakeThirtySecondInch": 2 },
+  "retort": { "solidsPercent": 28, "oilPercent": 52, "waterPercent": 20 },
+  "note": "raised the oil to water ratio over the tour"
+}

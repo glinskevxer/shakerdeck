@@ -19,6 +19,8 @@ run() {
 echo "smoke test"
 run check -c examples/check-brazos.json
 run check -c examples/check-brazos.json -f json
+run check -c examples/check-ward.json
+run hydraulics -w examples/well-ward.json -c examples/check-ward.json
 run hydraulics -w examples/well-brazos.json -c examples/check-brazos.json
 run hydraulics -w examples/well-brazos.json -c examples/check-brazos.json -r 450
 run daily -d examples/day-brazos.json -c examples/check-brazos.json -p examples/programme-brazos.json -P examples/products.json

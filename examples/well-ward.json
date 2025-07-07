@@ -1,0 +1,32 @@
+{
+  "well": "ward 2",
+  "totalDepthFeet": 13850,
+  "tvdFeet": 13400,
+  "weightPpg": 14.5,
+  "surfaceCase": 4,
+  "bitDiameterInches": 6.125,
+  "nozzleThirtySeconds": [11, 11, 11],
+  "flowGpm": 320,
+  "porePressurePpg": 13.6,
+  "fractureGradientPpg": 15.9,
+  "penetrationFeetPerHour": 28,
+  "strokesPerMinute": 95,
+  "hole": {
+    "sections": [
+      { "name": "intermediate casing", "idInches": 6.276, "bottomFeet": 11200, "cased": true },
+      { "name": "open hole", "idInches": 6.125, "bottomFeet": 13850 }
+    ]
+  },
+  "string": [
+    { "name": "drill collars", "odInches": 4.75, "idInches": 2.25, "lengthFeet": 450 },
+    { "name": "heavy weight", "odInches": 3.5, "idInches": 2.0625, "lengthFeet": 900 },
+    { "name": "drill pipe", "odInches": 3.5, "idInches": 2.764, "lengthFeet": 12500 }
+  ],
+  "pump": {
+    "label": "number two",
+    "type": "triplex",
+    "linerInches": 5.5,
+    "strokeInches": 12,
+    "efficiency": 0.93
+  }
+}
