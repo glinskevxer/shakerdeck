@@ -168,6 +168,45 @@ describe('the solids page', () => {
   });
 });
 
+describe('the quality page', () => {
+  const page = text['quality.md'];
+
+  it('names the three questions and the module behind each', () => {
+    for (const module of [
+      'src/program/window.js',
+      'src/quality/exceptions.js',
+      'src/quality/control.js',
+      'src/quality/lab.js',
+    ]) {
+      expect(page).toContain(module);
+    }
+  });
+
+  it('names the repeatability table where it actually lives', async () => {
+    const pilot = await import('../src/mudcheck/pilot.js');
+    expect(page).toContain('REPEATABILITY');
+    expect(page).toContain('src/mudcheck/pilot.js');
+    expect(Object.keys(pilot.REPEATABILITY).length).toBeGreaterThan(3);
+  });
+
+  it('points at the tests that walk the tree, and they are there', () => {
+    for (const test of [
+      'tests/consistency.test.js',
+      'tests/readme.test.js',
+      'tests/docs.test.js',
+    ]) {
+      expect(page).toContain(test);
+      expect(existsSync(test)).toBe(true);
+    }
+  });
+
+  it('quotes the module size limit the consistency test actually holds', () => {
+    const consistency = readFileSync('tests/consistency.test.js', 'utf8');
+    expect(page).toContain('four hundred lines');
+    expect(consistency).toContain('lines < 400');
+  });
+});
+
 describe('every page', () => {
   it('names a function that is actually exported where it names one', async () => {
     const modules = new Map();
