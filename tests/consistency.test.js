@@ -91,6 +91,7 @@ describe('every test file', () => {
       'tests/coverage-gaps.test.js',
       'tests/release.test.js',
       'tests/version.test.js',
+      'tests/index.test.js',
     ]);
     for (const test of testFiles) {
       if (
