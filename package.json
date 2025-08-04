@@ -2,14 +2,17 @@
   "name": "shakerdeck",
   "version": "1.0.0",
   "private": true,
-  "description": "Mud check, hydraulics and material balance desk for a drilling fluids service",
+  "description": "Mud check, hydraulics, material balance and reporting for a drilling fluids service",
   "keywords": [
     "drilling-fluids",
     "mud-engineering",
     "rheology",
     "hydraulics",
     "solids-control",
-    "oilfield"
+    "oilfield",
+    "mud-report",
+    "well-control",
+    "material-balance"
   ],
   "license": "MIT",
   "author": "glinskevxer <roym78109@gmail.com>",
