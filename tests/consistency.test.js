@@ -92,6 +92,7 @@ describe('every test file', () => {
       'tests/release.test.js',
       'tests/version.test.js',
       'tests/index.test.js',
+      'tests/workflow.test.js',
     ]);
     for (const test of testFiles) {
       if (

@@ -51,8 +51,8 @@ jobs:
           npx vitest run --reporter=json --outputFile=/tmp/vitest.json >/dev/null 2>&1 || true
           count=$(node -e "process.stdout.write(String(require('/tmp/vitest.json').numTotalTests))")
           echo "$count tests"
-          if [ "$count" -lt 1000 ]; then
-            echo "the suite has fallen below the floor of 1000 tests" >&2
+          if [ "$count" -lt 2000 ]; then
+            echo "the suite has fallen below the floor of 2000 tests" >&2
             exit 1
           fi
 
@@ -109,6 +109,21 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run release:check
+
+  docs:
+    name: docs and readme
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.18.2'
+          cache: npm
+      - run: npm ci
+      - name: every command line the readme and the docs print still runs
+        run: npx vitest run tests/readme.test.js tests/docs.test.js
+      - name: the tree still holds together
+        run: npx vitest run tests/consistency.test.js tests/index.test.js tests/packaging.test.js
 
   audit:
     name: dependency advisories
