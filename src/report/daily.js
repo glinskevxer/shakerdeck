@@ -7,8 +7,8 @@
  * then what was done to it, then what it cost.
  */
 import { round } from '../util/number.js';
-import { heading, rule, listPhrase } from '../util/text.js';
-import { definitionList, table } from '../util/table.js';
+import { listPhrase } from '../util/text.js';
+import { title, block, firstBlock, tableBlock, listBlock } from './blocks.js';
 import { readCheck } from '../mudcheck/record.js';
 import { derive, judgeableReadings } from '../mudcheck/derive.js';
 import { checkAgainstWindow, sectionAt } from '../program/window.js';
@@ -57,9 +57,8 @@ export function buildDaily({
 
 function header(data) {
   return [
-    heading(`daily mud report  ${data.well}`),
-    rule(PAGE_WIDTH),
-    ...definitionList([
+    ...title(`daily mud report  ${data.well}`, PAGE_WIDTH),
+    ...firstBlock([
       ['report', data.reportNumber ?? ''],
       ['date', data.date],
       ['depth', `${data.check.depthFeet} ft`],
@@ -88,28 +87,20 @@ function properties(data) {
       ['yield point', `${data.rheology.yieldPoint} lb/100ft2`]
     );
   }
-  return [
-    '',
-    heading('mud properties'),
-    ...definitionList(rows.filter(([, value]) => value !== null && value !== undefined)),
-  ];
+  return block('mud properties', rows);
 }
 
 function solidsBlock(data) {
   if (!data.solids) {
     return [];
   }
-  return [
-    '',
-    heading('solids'),
-    ...definitionList([
-      ['total', `${data.solids.solidsPercent} %`],
-      ['high gravity', `${data.solids.highGravityPercent} % / ${data.solids.bariteLbBbl} lb/bbl`],
-      ['low gravity', `${data.solids.lowGravityPercent} % / ${data.solids.lowGravityLbBbl} lb/bbl`],
-      ['drilled', `${data.solids.drilledPercent} %`],
-      ['average gravity', data.solids.averageSg],
-    ]),
-  ];
+  return block('solids', [
+    ['total', `${data.solids.solidsPercent} %`],
+    ['high gravity', `${data.solids.highGravityPercent} % / ${data.solids.bariteLbBbl} lb/bbl`],
+    ['low gravity', `${data.solids.lowGravityPercent} % / ${data.solids.lowGravityLbBbl} lb/bbl`],
+    ['drilled', `${data.solids.drilledPercent} %`],
+    ['average gravity', data.solids.averageSg],
+  ]);
 }
 
 function exceptionsBlock(data) {
@@ -117,70 +108,58 @@ function exceptionsBlock(data) {
     return [];
   }
   if (data.compliance.inWindow) {
-    return [
-      '',
-      heading('programme'),
+    return listBlock('programme', [
       `every property is inside the ${data.compliance.section} window`,
-    ];
+    ]);
   }
-  return [
-    '',
-    heading('programme exceptions'),
-    table(
-      [
-        { key: 'label', heading: 'property' },
-        { key: 'value', heading: 'read', align: 'right' },
-        { key: 'limit', heading: 'limit', align: 'right' },
-        { key: 'side', heading: 'side' },
-        { key: 'byHowMuch', heading: 'out by', align: 'right' },
-      ],
-      data.compliance.exceptions
-    ),
-  ];
+  return tableBlock(
+    'programme exceptions',
+    [
+      { key: 'label', heading: 'property' },
+      { key: 'value', heading: 'read', align: 'right' },
+      { key: 'limit', heading: 'limit', align: 'right' },
+      { key: 'side', heading: 'side' },
+      { key: 'byHowMuch', heading: 'out by', align: 'right' },
+    ],
+    data.compliance.exceptions
+  );
 }
 
 function activityBlock(data) {
   if (!data.activity || data.activity.length === 0) {
     return [];
   }
-  return ['', heading('activity'), ...data.activity.map((line) => `  ${line}`)];
+  return listBlock('activity', data.activity);
 }
 
 function productsBlock(data) {
   if (!data.products || data.products.length === 0) {
     return [];
   }
-  return [
-    '',
-    heading('products used'),
-    table(
-      [
-        { key: 'name', heading: 'product' },
-        { key: 'quantity', heading: 'qty', align: 'right' },
-        { key: 'unit', heading: 'unit' },
-        { key: 'value', heading: 'value', decimals: 2, align: 'right' },
-      ],
-      data.products
-    ),
-  ];
+  return tableBlock(
+    'products used',
+    [
+      { key: 'name', heading: 'product' },
+      { key: 'quantity', heading: 'qty', align: 'right' },
+      { key: 'unit', heading: 'unit' },
+      { key: 'value', heading: 'value', decimals: 2, align: 'right' },
+    ],
+    data.products
+  );
 }
 
 function costsBlock(data) {
   if (!data.costs) {
     return [];
   }
-  return [
-    '',
-    heading('cost'),
-    ...definitionList([
-      ['products', data.costs.productCost],
-      ['service', data.costs.serviceCharge],
-      ['rental', data.costs.rentalCharge],
-      ['haulage', data.costs.haulageCharge],
-      ['day total', data.costs.total],
-      ['per foot', data.costs.costPerFoot],
-    ]),
-  ];
+  return block('cost', [
+    ['products', data.costs.productCost],
+    ['service', data.costs.serviceCharge],
+    ['rental', data.costs.rentalCharge],
+    ['haulage', data.costs.haulageCharge],
+    ['day total', data.costs.total],
+    ['per foot', data.costs.costPerFoot],
+  ]);
 }
 
 function volumesBlock(data) {
@@ -198,7 +177,7 @@ function volumesBlock(data) {
   if (rows.length === 0) {
     return [];
   }
-  return ['', heading('volumes'), ...definitionList(rows)];
+  return block('volumes', rows);
 }
 
 /**

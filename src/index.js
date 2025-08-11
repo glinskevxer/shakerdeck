@@ -57,6 +57,7 @@ export * as control from './quality/control.js';
 export * as series from './quality/series.js';
 export * as exceptions from './quality/exceptions.js';
 export * as killsheet from './wellcontrol/killsheet.js';
+export * as blocks from './report/blocks.js';
 export * as dailyReport from './report/daily.js';
 export * as recap from './report/recap.js';
 export * as exports from './report/export.js';
