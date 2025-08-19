@@ -9,8 +9,8 @@
  */
 import { round, mean } from '../util/number.js';
 import { missingDays, daysBetween } from '../util/clock.js';
-import { heading, rule, listPhrase } from '../util/text.js';
-import { definitionList, table } from '../util/table.js';
+import { listPhrase } from '../util/text.js';
+import { title, block, firstBlock, tableBlock, listBlock } from './blocks.js';
 import { readChecks } from '../mudcheck/record.js';
 import { exceptionReport, byProperty, programmeSuspects } from '../quality/exceptions.js';
 import { series, biggestMovers } from '../quality/series.js';
@@ -61,17 +61,14 @@ export function buildRecap({ well, checks, programme = null, days = [] }) {
  */
 export function renderRecap(data) {
   const lines = [
-    heading(`well recap  ${data.well}`),
-    rule(74),
-    ...definitionList([
+    ...title(`well recap  ${data.well}`, 74),
+    ...firstBlock([
       ['from', `${data.from} at ${data.fromDepthFeet} ft`],
       ['to', `${data.to} at ${data.toDepthFeet} ft`],
       ['days', data.days],
       ['checks', data.checks],
     ]),
-    '',
-    heading('mud weight'),
-    ...definitionList([
+    ...block('mud weight', [
       ['start', data.weight.start],
       ['end', data.weight.end],
       ['lowest', data.weight.lowest],
@@ -85,9 +82,8 @@ export function renderRecap(data) {
   ];
   if (data.movers.length > 0) {
     lines.push(
-      '',
-      heading('what moved'),
-      table(
+      ...tableBlock(
+        'what moved',
         [
           { key: 'property', heading: 'property' },
           { key: 'from', heading: 'from', align: 'right' },
@@ -100,44 +96,41 @@ export function renderRecap(data) {
   }
   if (data.exceptions) {
     lines.push(
-      '',
-      heading('against the programme'),
-      ...definitionList([
+      ...block('against the programme', [
         ['checks judged', data.exceptions.judged],
         ['checks outside', data.exceptions.outside],
         ['share outside', data.exceptions.outsideShare],
       ])
     );
-    if (data.exceptionsByProperty.length > 0) {
-      lines.push(
-        table(
-          [
-            { key: 'label', heading: 'property' },
-            { key: 'times', heading: 'times', align: 'right' },
-            { key: 'worst', heading: 'worst', decimals: 3, align: 'right' },
-          ],
-          data.exceptionsByProperty
-        )
-      );
-    }
-    for (const suspect of data.suspects) {
-      lines.push(`  ${suspect.label}: ${suspect.reason}`);
-    }
+    lines.push(
+      ...tableBlock(
+        'by property',
+        [
+          { key: 'label', heading: 'property' },
+          { key: 'times', heading: 'times', align: 'right' },
+          { key: 'worst', heading: 'worst', decimals: 3, align: 'right' },
+        ],
+        data.exceptionsByProperty
+      ),
+      ...listBlock(
+        'windows worth revisiting',
+        data.suspects.map((suspect) => `${suspect.label}: ${suspect.reason}`)
+      )
+    );
   }
   if (data.missingCheckDays.length > 0) {
-    lines.push('', heading('days with no check'), `  ${listPhrase(data.missingCheckDays)}`);
+    lines.push(...listBlock('days with no check', [listPhrase(data.missingCheckDays)]));
   }
   if (data.costs) {
     lines.push(
-      '',
-      heading('cost'),
-      ...definitionList([
+      ...block('cost', [
         ['total', data.costs.totalCost],
         ['footage', data.costs.totalFootage],
         ['per foot', data.costs.costPerFoot],
         ['per barrel built', data.costs.costPerBarrelBuilt],
       ]),
-      table(
+      ...tableBlock(
+        'where it went',
         [
           { key: 'category', heading: 'category' },
           { key: 'value', heading: 'value', decimals: 2, align: 'right' },

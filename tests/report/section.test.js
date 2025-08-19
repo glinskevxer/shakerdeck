@@ -94,7 +94,7 @@ describe('renderSectionReport', () => {
   });
 
   it('names what the section was worst on', () => {
-    expect(text).toMatch(/worst on/);
+    expect(text).toMatch(/WORST ON/);
   });
 
   it('prints the plan comparison when there is one', () => {

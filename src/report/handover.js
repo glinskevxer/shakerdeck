@@ -8,8 +8,8 @@
  * said they would do and has not done.
  */
 import { round } from '../util/number.js';
-import { heading, rule, listPhrase } from '../util/text.js';
-import { definitionList } from '../util/table.js';
+import { listPhrase } from '../util/text.js';
+import { title, firstBlock, listBlock } from './blocks.js';
 import { biggestMovers } from '../quality/series.js';
 import { chart } from '../quality/control.js';
 import { exceptionReport, byProperty } from '../quality/exceptions.js';
@@ -52,13 +52,30 @@ export function buildHandover({
 }
 
 /**
+ * The lines under the what is moving heading, which is the block that carries
+ * the reason the handover exists.
+ */
+function movingLines(data) {
+  const lines =
+    data.movers.length === 0
+      ? ['nothing moved worth mentioning']
+      : data.movers.map(
+          (mover) =>
+            `${mover.property}: ${mover.from} to ${mover.to} over ${round(mover.overFeet, 0)} ft`
+        );
+  if (data.weightInControl === false) {
+    lines.push('the mud weight chart is out of control, look at the last few checks');
+  }
+  return lines;
+}
+
+/**
  * Lay it out for the helideck.
  */
 export function renderHandover(data) {
   const lines = [
-    heading(`handover  ${data.well}`),
-    rule(70),
-    ...definitionList([
+    ...title(`handover  ${data.well}`),
+    ...firstBlock([
       ['date', data.date],
       ['from', data.outgoing],
       ['to', data.incoming],
@@ -66,43 +83,26 @@ export function renderHandover(data) {
       ['depth', `${data.depthFeet} ft`],
       ['weight', `${data.weightPpg} ppg`],
     ]),
-    '',
-    heading('what is moving'),
   ];
-  if (data.movers.length === 0) {
-    lines.push('  nothing moved worth mentioning');
-  } else {
-    for (const mover of data.movers) {
-      lines.push(
-        `  ${mover.property}: ${mover.from} to ${mover.to} over ${round(mover.overFeet, 0)} ft`
-      );
-    }
-  }
-  if (data.weightInControl === false) {
-    lines.push('  the mud weight chart is out of control, look at the last few checks');
-  }
+  lines.push(...listBlock('what is moving', movingLines(data)));
+
   if (data.outOn.length > 0) {
-    lines.push('', heading('outside the programme'), `  ${listPhrase(data.outOn)}`);
+    lines.push(...listBlock('outside the programme', [listPhrase(data.outOn)]));
   }
-  if (data.treatmentsPending.length > 0) {
-    lines.push('', heading('treated and not answered yet'));
-    for (const treatment of data.treatmentsPending) {
-      lines.push(`  ${treatment.date}: ${treatment.what}`);
-    }
-  }
+  lines.push(
+    ...listBlock(
+      'treated and not answered yet',
+      data.treatmentsPending.map((treatment) => `${treatment.date}: ${treatment.what}`)
+    )
+  );
   if (data.short.length > 0) {
     lines.push(
-      '',
-      heading('short'),
-      `  ${listPhrase(data.short.map((line) => `${line.name} (${line.daysOfCover} days)`))}`
+      ...listBlock('short', [
+        listPhrase(data.short.map((line) => `${line.name} (${line.daysOfCover} days)`)),
+      ])
     );
   }
-  if (data.openItems.length > 0) {
-    lines.push('', heading('open'));
-    for (const item of data.openItems) {
-      lines.push(`  ${item}`);
-    }
-  }
+  lines.push(...listBlock('open', data.openItems));
   return lines;
 }
 

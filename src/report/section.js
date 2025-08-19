@@ -7,8 +7,8 @@
  * it would.
  */
 import { round, mean } from '../util/number.js';
-import { heading, rule, listPhrase } from '../util/text.js';
-import { definitionList, table } from '../util/table.js';
+import { listPhrase } from '../util/text.js';
+import { title, block, firstBlock, tableBlock, listBlock } from './blocks.js';
 import { series } from '../quality/series.js';
 import { exceptionReport, byProperty } from '../quality/exceptions.js';
 import { costToDate } from '../cost/daily.js';
@@ -69,9 +69,8 @@ export function buildSectionReport({
  */
 export function renderSectionReport(data) {
   const lines = [
-    heading(`section report  ${data.section}`),
-    rule(72),
-    ...definitionList([
+    ...title(`section report  ${data.section}`, 72),
+    ...firstBlock([
       ['from', `${data.fromFeet} ft`],
       ['to', `${data.toFeet} ft`],
       ['length', `${data.lengthFeet} ft`],
@@ -79,9 +78,7 @@ export function renderSectionReport(data) {
       ['checks', data.checks],
       ['days', data.days],
     ]),
-    '',
-    heading('mud weight'),
-    ...definitionList([
+    ...block('mud weight', [
       ['start', data.weight.start],
       ['end', data.weight.end],
       ['highest', data.weight.highest],
@@ -90,22 +87,24 @@ export function renderSectionReport(data) {
   ];
   if (data.exceptions) {
     lines.push(
-      '',
-      heading('against the programme'),
-      ...definitionList([
+      ...block('against the programme', [
         ['checks judged', data.exceptions.judged],
         ['checks outside', data.exceptions.outside],
       ])
     );
-    if (data.worstProperties.length > 0) {
-      lines.push(`  worst on ${listPhrase(data.worstProperties.map((row) => row.label))}`);
-    }
+    lines.push(
+      ...listBlock(
+        'worst on',
+        data.worstProperties.length === 0
+          ? []
+          : [listPhrase(data.worstProperties.map((row) => row.label))]
+      )
+    );
   }
   if (data.againstPlan) {
     lines.push(
-      '',
-      heading('against the plan'),
-      table(
+      ...tableBlock(
+        'against the plan',
         [
           { key: 'name', heading: '' },
           { key: 'planned', heading: 'planned', decimals: 2, align: 'right' },
@@ -127,9 +126,7 @@ export function renderSectionReport(data) {
     );
   } else if (data.costs) {
     lines.push(
-      '',
-      heading('cost'),
-      ...definitionList([
+      ...block('cost', [
         ['total', data.costs.totalCost],
         ['per foot', data.costs.costPerFoot],
       ])
