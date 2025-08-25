@@ -149,3 +149,98 @@ describe('exports with values that are not there', () => {
     expect(round(0.125, 2)).toBe(0.13);
   });
 });
+
+describe('the paths the ordinary run does not reach', () => {
+  it('renders a handover with no movers and a settled chart', async () => {
+    const { buildHandover, renderHandover } = await import('../src/report/handover.js');
+    const { readChecks } = await import('../src/mudcheck/record.js');
+    const flat = readChecks([
+      { well: 'x', date: '2025-08-20', depthFeet: 9000, weightPpg: 12.4 },
+      { well: 'x', date: '2025-08-21', depthFeet: 9000, weightPpg: 12.4 },
+    ]);
+    const text = renderHandover(
+      buildHandover({ well: 'x', outgoing: 'a', incoming: 'b', date: '2025-08-21', checks: flat })
+    ).join('\n');
+    expect(text).toContain('nothing moved worth mentioning');
+  });
+
+  it('renders a handover with everything on it at once', async () => {
+    const { buildHandover, renderHandover } = await import('../src/report/handover.js');
+    const { readChecks } = await import('../src/mudcheck/record.js');
+    const climbing = readChecks(
+      Array.from({ length: 8 }, (_, index) => ({
+        well: 'x',
+        date: `2025-08-1${index}`,
+        depthFeet: 9000 + index * 100,
+        weightPpg: 12 + index * 0.1,
+      }))
+    );
+    const text = renderHandover(
+      buildHandover({
+        well: 'x',
+        outgoing: 'a',
+        incoming: 'b',
+        date: '2025-08-21',
+        checks: climbing,
+        stock: [{ name: 'barite', short: true, daysOfCover: 1.2 }],
+        treatments: [{ date: '2025-08-20', what: 'lime', responded: false }],
+        openItems: ['the number two pump'],
+      })
+    ).join('\n');
+    expect(text).toContain('SHORT');
+    expect(text).toContain('TREATED AND NOT ANSWERED YET');
+    expect(text).toContain('OPEN');
+  });
+
+  it('finds a degasser that removes nothing at all', async () => {
+    const { steadyCut } = await import('../src/solidscontrol/degasser.js');
+    const settled = steadyCut({
+      type: 'poor boy',
+      flowGpm: 100000,
+      gasInPerCirculationPpg: 0.2,
+      uncutPpg: 12.4,
+    });
+    expect(settled.neverSettles).toBe(false);
+  });
+
+  it('reads a programme with a section that has no windows at all', async () => {
+    const { programmeCommand } = await import('../src/cli/commands/programme.js');
+    const result = programmeCommand({
+      programme: { well: 'x', sections: [{ name: 'riserless', fromFeet: 0, toFeet: 500 }] },
+    });
+    expect(result.lines.join('\n')).toContain('RISERLESS');
+  });
+
+  it('reads a check with gels but no dials on it', async () => {
+    const { readCheckSheet } = await import('../src/cli/commands/check.js');
+    const sheet = readCheckSheet({
+      well: 'x',
+      date: '2025-08-21',
+      depthFeet: 9000,
+      weightPpg: 12.4,
+      gels: { tenSecond: 6, tenMinute: 9 },
+    });
+    expect(sheet.rheology).toBe(null);
+    expect(sheet.gels.tenMinute).toBe(9);
+  });
+
+  it('reads a survey station at the very first depth', async () => {
+    const { runSurvey, tvdAt } = await import('../src/well/survey.js');
+    const survey = runSurvey([
+      { measuredDepthFeet: 0.001, inclinationDegrees: 0 },
+      { measuredDepthFeet: 1000, inclinationDegrees: 0 },
+    ]);
+    expect(tvdAt(survey, 0)).toBe(0);
+  });
+
+  it('orders against a product with no history and no use', async () => {
+    const { reorderReport } = await import('../src/inventory/reorder.js');
+    const rows = reorderReport({
+      stock: [{ code: 'X', name: 'x', unit: 'sack', closingQuantity: 0 }],
+      history: { X: [] },
+      leadTimeDays: 3,
+      coverDays: 14,
+    });
+    expect(rows[0].daysOfCover).toBe(null);
+  });
+});
