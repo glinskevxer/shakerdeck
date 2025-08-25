@@ -212,6 +212,16 @@ powerlaw.powerLawSummary(dials);
 ecd.equivalentCirculatingDensity({ weightPpg: 12.4, annularLossPsi: 336, tvdFeet: 10000 });
 ```
 
+## What it will not do
+
+It does not decide anything. Every command reports and none of them recommend,
+except where a recommendation is a piece of arithmetic with a threshold on it,
+and in those cases the threshold is a named constant in the module rather than
+a number buried in a comparison.
+
+It does not talk to a network, it does not write anything it was not asked to
+write, and it holds no state between runs. Every input is a file you can read.
+
 ## Units
 
 Field units throughout: pounds a gallon, barrels, feet, inches, gallons a
@@ -226,6 +236,17 @@ both have bitten this codebase and both are silent:
   equivalent centipoise. They are a factor of 478.8 apart.
 - Moore's laminar slip velocity constant is published with the viscosity in
   poise. Everything else on the desk is in centipoise.
+
+## The docs
+
+| page                             | what is in it                                                       |
+| -------------------------------- | ------------------------------------------------------------------- |
+| [units](docs/units.md)           | field units, and the two conversions that have bitten this codebase |
+| [rheology](docs/rheology.md)     | the three models, and why all three are carried                     |
+| [hydraulics](docs/hydraulics.md) | the order the circulating system is worked in                       |
+| [solids](docs/solids.md)         | the retort, the train, and dilution against removal                 |
+| [quality](docs/quality.md)       | the three different questions the quality code asks                 |
+| [workflow](docs/workflow.md)     | a tour on the desk, command by command                              |
 
 ## Running the checks
 
